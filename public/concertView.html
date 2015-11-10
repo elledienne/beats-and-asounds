@@ -1,4 +1,4 @@
-<div ng-repeat='event in data'>
+<div ng-repeat='event in data | orderBy:"show.start.date"'>
   <div class='showListing' ng-mouseover='focusIn()' ng-mouseleave='focusOut()'>
     <div class='imageContainer'>
       <img ng-src="{{event.info.images[0].url}}"></img>

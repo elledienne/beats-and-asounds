@@ -205,7 +205,7 @@ app.get('/myconcerts', function(req, res) {
                     "displayName": "Kendrick Lamar at Fox Theater (November 10, 2015)",
                     "start": {
                       "time": "20:00:00",
-                      "date": "2015-11-18",
+                      "date": "2015-11-10",
                       "datetime": "2015-11-18T20:00:00-0800"
                     },
                     "performance": [{
@@ -252,7 +252,7 @@ app.get('/myconcerts', function(req, res) {
                     "displayName": "Ellie Goulding at SAP Center (April 6, 2016)",
                     "start": {
                       "time": "20:00:00",
-                      "date": "2015-04-06",
+                      "date": "2016-04-06",
                       "datetime": "2015-04-06T20:00:00-0800"
                     },
                     "performance": [{
@@ -299,7 +299,7 @@ app.get('/myconcerts', function(req, res) {
                     "displayName": "Jess Glynne at Mezzanine (February 8, 2016)",
                     "start": {
                       "time": "20:00:00",
-                      "date": "2015-11-18",
+                      "date": "2016-02-08",
                       "datetime": "2015-11-18T20:00:00-0800"
                     },
                     "performance": [{
