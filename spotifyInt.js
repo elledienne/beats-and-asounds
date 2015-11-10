@@ -1,6 +1,7 @@
 var querystring = require('querystring');
 var Promise = require('bluebird');
 var request = require('request');
+
 var util = require('./utils.js');
 var supersecret = require('./config.js');
 
@@ -56,13 +57,8 @@ module.exports.getToken = function(req, res) {
           refresh_token = body.refresh_token;
 
         util.generateSession(req, access_token, refresh_token, function() {
-            res.redirect('/');
-          })
-          // req.session.regenerate(function() {
-          //   req.session.accessToken = body.access_token;
-          //   req.session.refreshToken = body.refresh_token;
-          //   res.redirect('/')
-          // })
+          res.redirect('/');
+        });
       } else {
         res.redirect('/#' +
           querystring.stringify({
