@@ -3,14 +3,15 @@ var request = require('request');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var Promise = require('bluebird');
-var session = require('express-session')
+var session = require('express-session');
+var supersecret = require('./config.js')
 
-var client_id = ""; // in gitignore
-var client_secret = ""; // in gitignore
+var client_id = supersecret.client_id;
+var client_secret = supersecret.client_secret;
 var redirect_uri = 'http://localhost:8888/callback';
 
-var google_client_id = ""; // in gitignore
-var google_client_secret = ""; // in gitignore
+var google_client_id = supersecret.google_client_id;
+var google_client_secret = supersecret.google_client_secret;
 
 var generateRandomString = function(length) {
   var text = '';
@@ -49,30 +50,6 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/callback', function(req, res) {
-
-  var promisifiedGet = function(options) {
-    return new Promise(function(resolve, reject) {
-      request.get(options, function(error, response, body) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response);
-        }
-      })
-    })
-  }
-  var promisifiedPost = function(options) {
-    return new Promise(function(resolve, reject) {
-      request.get(options, function(error, response, body) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response);
-        }
-      })
-    })
-  }
-
   var code = req.query.code || null;
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -121,7 +98,6 @@ app.get('/callback', function(req, res) {
 app.get('/myconcerts', function(req, res) {
 
   if (req.session.accessToken === undefined) {
-    console.log("AHHH")
     res.end('go to login');
   } else {
 
@@ -212,6 +188,15 @@ app.get('/myconcerts', function(req, res) {
                 })
 
                 //SONGKICK REQUESTS HERE
+                var songKickOptions = {
+                  url: 'http://api.songkick.com/api/3.0/metro_areas/{metro_area_id}/calendar.json?apikey={your_api_key}',
+                }
+                request.get(songKickOptions, function(error, response, body) {
+                  var realResponse = body.results;
+                  //move up filtering once request is working
+                })
+
+
                 var dummyResponse = {
                   "event": [{
                     "id": 25105504,
@@ -363,8 +348,8 @@ app.get('/myconcerts', function(req, res) {
                       artists[performer.artist.displayName].show = show;
                       concerts.push(artists[performer.artist.displayName]);
                     }
-                  })
-                })
+                  });
+                });
                 res.json(concerts);
               })
 

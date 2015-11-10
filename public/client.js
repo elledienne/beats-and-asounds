@@ -41,7 +41,6 @@ angular.module('beatssounds', ['ngRoute'])
     return date.split('-');
   }
   $scope.parseMonth = function(date) {
-    console.log('here')
     var month = $scope.parseDate(date)[1];
     return auth.convertMonth(month);
   };
