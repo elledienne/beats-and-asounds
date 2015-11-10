@@ -54,6 +54,10 @@
   margin: 2px;
 }
 
+.favorite{
+  background-color: yellow;
+}
+
 .extras {
   position: absolute;
   bottom: 10px;

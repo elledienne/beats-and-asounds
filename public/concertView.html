@@ -8,7 +8,7 @@
       <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
     </div>
     <div class='date'>{{parseMonth(event.show.start.date)}}<br>{{parseDay(event.show.start.date)}}</div> <br>
-    <div class='name'>{{event.info.name}}</div> <br>
+    <div class='name' ng-class='isFavorite(event)'>{{event.info.name}}</div> <br>
     <div class='venue'>@{{event.show.venue.displayName}}</div>
     <div class='extras' ng-class='focus'>
       <div class='billing'>{{ findBilling(event.info.name, event.show.performance) }}</div>
@@ -16,4 +16,5 @@
     </div>
   </div>
 </div>
+
 

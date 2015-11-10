@@ -24,6 +24,11 @@ angular.module('beatssounds.concerts', [])
       }
     };
 
+    $scope.isFavorite = function(event) {
+      console.log(event)
+      return event.myCount > 5 ? 'favorite' : '';
+    }
+
     $scope.getConcerts = function() {
       this.isLoading = true;
       auth.getConcerts().then(function(resp) {
