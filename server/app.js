@@ -5,7 +5,7 @@ var session = require('express-session');
 
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
-var util = require('./utils.js')
+var util = require('./utils.js');
 
 
 
@@ -15,7 +15,7 @@ app.use(session({
   secret: "super secret string"
 }));
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/../public'))
   .use(cookieParser());
 
 app.get('/login', function(req, res) {
