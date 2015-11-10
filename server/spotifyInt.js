@@ -130,20 +130,9 @@ module.exports.getTracks = function(token, userID, playlists, callback) {
         },
         json: true
       };
-      playlistPromises.push(
-        new Promise(function(resolve, reject) {
-          request.get(trackOptions, function(error, response, body) {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(body.items);
-            }
-          });
-        })
-      );
+      playlistPromises.push(util.buildPromise(trackOptions));
     }
   });
-
   Promise.all(playlistPromises)
     .then(function(tracks) {
       callback(tracks);
@@ -154,35 +143,23 @@ module.exports.getArtists = function(tracks, callback) {
   var artistPromises = [];
   var artists = {};
   tracks.forEach(function(trackListings) {
-    trackListings.forEach(function(item) {
+    trackListings.items.forEach(function(item) {
       item.track.artists.forEach(function(artist) {
         if (!artists[artist.name]) {
           artists[artist.name] = {
-            myCount: 1,
+            myCount: 1
           };
           var artistOptions = {
             url: 'https://api.spotify.com/v1/artists/' + artist.id,
             json: true
           };
-
-          artistPromises.push(
-            new Promise(function(resolve, reject) {
-              request.get(artistOptions, function(error, response, body) {
-                if (error) {
-                  reject(error);
-                } else {
-                  resolve(body);
-                }
-              });
-            })
-          );
+          artistPromises.push(util.buildPromise(artistOptions));
         } else {
           artists[artist.name].myCount++;
         }
       });
     });
   });
-
   Promise.all(artistPromises)
     .then(function(artistObjs) {
       artistObjs.forEach(function(artistObj) {

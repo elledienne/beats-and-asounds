@@ -1,4 +1,6 @@
 var session = require('express-session');
+var Promise = require('bluebird');
+var request = require('request');
 
 module.exports.generateRandomString = function(length) {
   var text = '';
@@ -24,6 +26,18 @@ module.exports.checkToken = function(req, res, next) {
   } else {
     next();
   }
+};
+
+module.exports.buildPromise = function(options) {
+  return new Promise(function(resolve, reject) {
+    request.get(options, function(error, respose, body) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    })
+  });
 };
 
 module.exports.findMyConcerts = function(artists, concerts, callback) {
