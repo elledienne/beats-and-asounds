@@ -1,5 +1,8 @@
-img {
-  width: 250px;
+#login, .loading {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 70px;
 }
 
 .btn {
@@ -11,16 +14,15 @@ img {
   height: 150px;
   border: none;
   border-radius: 150px;
-  background-image: url('spotify.jpg');
+  background-image: url('assets/spotify.jpg');
 }
 
-#login {
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-  padding-top: 70px;
+.loadingGif {
+  width: 150px;
 }
-
+.artistImg {
+  width: 250px;
+}
 
 .imageContainer {
   width : 250px;
@@ -68,20 +70,6 @@ img {
   -moz-transition:height 200ms linear;
   -o-transition: height 200ms linear;
   transition: height 200ms linear;
-}
-
-.venue {
-  
-  
-}
-
-.billing {
-
-}
-
-.going {
-
-
 }
 
 

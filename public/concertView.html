@@ -1,7 +1,11 @@
+<div class='loading' ng-if='isLoading'>
+  <img class='loadingGif' src='assets/spinny.gif'></img><br> 
+  Finding your concerts...
+</div>
 <div ng-repeat='event in data | orderBy:"show.start.date"'>
   <div class='showListing' ng-mouseover='focusIn()' ng-mouseleave='focusOut()'>
     <div class='imageContainer'>
-      <img ng-src="{{event.info.images[0].url}}"></img>
+      <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
     </div>
     <div class='date'>{{parseMonth(event.show.start.date)}}<br>{{parseDay(event.show.start.date)}}</div> <br>
     <div class='name'>{{event.info.name}}</div> <br>
