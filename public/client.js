@@ -10,6 +10,9 @@ angular.module('beatssounds', ['ngRoute'])
       templateUrl: 'loginView.html',
       controller: 'authController'
     })
+    .otherwise({
+      redirectTo: '/'
+    })
 })
 
 .factory('auth', function($http, $location, $window) {
