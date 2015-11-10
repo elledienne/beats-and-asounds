@@ -1,0 +1,88 @@
+img {
+  width: 250px;
+}
+
+.btn {
+  display: block;
+  margin: 0 auto;
+}
+.loginBtn {
+  width: 150px;
+  height: 150px;
+  border: none;
+  border-radius: 150px;
+  background-image: url('spotify.jpg');
+}
+
+#login {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 70px;
+}
+
+
+.imageContainer {
+  width : 250px;
+  height : 250px;
+  overflow: hidden;
+  float:left;
+}
+
+.showListing {
+  position: relative;
+  border: 1px black;
+  height: 270px;
+  padding: 10px 100px;
+  overflow: hidden;
+}
+
+.date, .name, .venue, .extras {
+  display: inline-block;
+  width: 250px;
+  text-align: center;
+}
+.date {
+  font-size: 20pt;
+  border: 1px solid black; 
+}
+
+.name {
+  font-size: 20pt;
+  margin: 2px;
+}
+
+.extras {
+  position: absolute;
+  bottom: 10px;
+  left: 350px;
+  height: 0;
+  overflow: hidden;
+}
+
+.extras.selected {
+  height: 90px;
+  padding: 15px;
+  background-color: #c9c9c9;
+  -webkit-transition: height 200ms linear;
+  -moz-transition:height 200ms linear;
+  -o-transition: height 200ms linear;
+  transition: height 200ms linear;
+}
+
+.venue {
+  
+  
+}
+
+.billing {
+
+}
+
+.going {
+
+
+}
+
+
+

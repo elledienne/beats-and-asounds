@@ -1,0 +1,14 @@
+<div ng-repeat='event in data'>
+  <div class='showListing' ng-mouseover='focusIn()' ng-mouseleave='focusOut()'>
+    <div class='imageContainer'>
+      <img ng-src="{{event.info.images[0].url}}"></img>
+    </div>
+    <div class='date'>{{parseMonth(event.show.start.date)}}<br>{{parseDay(event.show.start.date)}}</div> <br>
+    <div class='name'>{{event.info.name}}</div> <br>
+    <div class='venue'>@{{event.show.venue.displayName}}</div>
+    <div class='extras' ng-class='focus'>
+      <div class='billing'>{{ findBilling(event.info.name, event.show.performance) }}</div>
+      <a ng-href='{{event.show.uri}}' class='going'>Check for tickets</a>
+    </div>
+  </div>
+</div>
