@@ -27,6 +27,7 @@ app.get('/callback', function(req, res) {
 
 app.get('/myconcerts', util.checkToken,
   function(req, res) {
+    console.log(req.query);
     var token = req.session.accessToken;
     var userID = req.session.userID;
     spotify.getPlaylists(token, userID, function(token, userID, playlists) {

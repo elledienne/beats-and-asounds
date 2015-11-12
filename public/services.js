@@ -1,9 +1,13 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
     var getConcerts = function() {
+      var locationData = localStorage.getItem("location");
       return $http({
           method: 'GET',
           url: '/myconcerts',
+          params: {
+            location: locationData
+          }
         })
         .then(function(resp) {
           if (resp.data === "go to login") {
@@ -39,4 +43,23 @@ angular.module('beatssounds.services', [])
     parseMonth: parseMonth,
     parseDay: parseDay
   };
+})
+
+.factory('space', function() {
+  var findLocation = function(callback) {
+    if (navigator.geolocation) {
+      console.log("here in geolocation");
+      navigator.geolocation.getCurrentPosition(function(position) {
+        localStorage.setItem("location", JSON.stringify([position.coords.latitude, position.coords.longitude]));
+        callback();
+      });
+    } else {
+      localStorage.setItem("location", "");
+      callback();
+    }
+  };
+
+  return {
+    findLocation: findLocation
+  }
 });
