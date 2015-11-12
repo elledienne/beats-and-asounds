@@ -10,7 +10,7 @@ module.exports.findConcerts = function(callback) {
     callback(cache);
   } else {
     var songKickOptions = {
-      url: 'http://api.songkick.com/api/3.0/metro_areas/26330/calendar.json?apikey=' + api_key + '&per_page=all',
+      url: 'http://api.songkick.com/api/3.0/metro_areas/26330/calendar.json?apikey=' + api_key + '&per_page=50',
       json: true
     }
     request.get(songKickOptions, function(error, response, body) {

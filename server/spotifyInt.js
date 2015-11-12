@@ -14,7 +14,7 @@ module.exports.authorize = function(res) {
   var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
 
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email user-follow-read';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -52,13 +52,14 @@ module.exports.getToken = function(req, res) {
 
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
+        var access_token = body.access_token;
+        var refresh_token = body.refresh_token;
 
-        var access_token = body.access_token,
-          refresh_token = body.refresh_token;
-
-        util.generateSession(req, access_token, refresh_token, function() {
-          res.redirect('/');
-        });
+        module.exports.findUser(access_token, function(access_token, userID) {
+          util.generateSession(req, access_token, refresh_token, userID, function() {
+            res.redirect('/');
+          });
+        })
       } else {
         res.redirect('/#' +
           querystring.stringify({
@@ -104,6 +105,27 @@ module.exports.findUser = function(token, callback) {
   })
 };
 
+module.exports.getMyArtists = function(token, callback) {
+  var followOptions = {
+    url: 'https://api.spotify.com/v1/me/following?type=artist&limit=50',
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+    json: true
+  }
+  request.get(followOptions, function(error, response, body) {
+    var artistsArr = body.artists.items;
+    // TO DO: what if they have more than 50 artists?
+    var artists = {};
+    artistsArr.forEach(function(artist) {
+      artists[artist.name] = {
+        info: artist
+      };
+    })
+    callback(artists);
+  })
+}
+
 module.exports.getPlaylists = function(token, userID, callback) {
   var playlistOptions = {
     url: 'https://api.spotify.com/v1/users/' + userID + '/playlists',
@@ -143,22 +165,24 @@ module.exports.getArtists = function(tracks, callback) {
   var artistPromises = [];
   var artists = {};
   tracks.forEach(function(trackListings) {
-    trackListings.items.forEach(function(item) {
-      item.track.artists.forEach(function(artist) {
-        if (!artists[artist.name]) {
-          artists[artist.name] = {
-            myCount: 1
-          };
-          var artistOptions = {
-            url: 'https://api.spotify.com/v1/artists/' + artist.id,
-            json: true
-          };
-          artistPromises.push(util.buildPromise(artistOptions));
-        } else {
-          artists[artist.name].myCount++;
-        }
+    if (trackListings.items) {
+      trackListings.items.forEach(function(item) {
+        item.track.artists.forEach(function(artist) {
+          if (!artists[artist.name]) {
+            artists[artist.name] = {
+              myCount: 1
+            };
+            var artistOptions = {
+              url: 'https://api.spotify.com/v1/artists/' + artist.id,
+              json: true
+            };
+            artistPromises.push(util.buildPromise(artistOptions));
+          } else {
+            artists[artist.name].myCount++;
+          }
+        });
       });
-    });
+    }
   });
   Promise.all(artistPromises)
     .then(function(artistObjs) {
