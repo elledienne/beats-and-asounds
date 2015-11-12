@@ -1,5 +1,5 @@
 angular.module('beatssounds.concerts', ['ui.bootstrap'])
-  .controller('concertController', function ($scope, auth, time, space) {
+  .controller('concertsController', function ($scope, auth, time, space) {
 
     $scope.parseMonth = function(date) {
       return time.parseMonth(date);
@@ -28,22 +28,21 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       return event.myCount > 5 ? 'favorite' : '';
     }
 
-    $scope.getConcerts = function() {
+    $scope.getPlaylists = function() {
       this.isLoading = true;
-      auth.getConcerts().then(function(resp) {
+      auth.getPlaylists().then(function(resp) {
         $scope.isLoading = false;
         $scope.data = resp;
         $scope.paginate();
-        // $scope.pageCounter();
       })
     };
 
     if (!localStorage.getItem('location')) {
       space.findLocation(function() {
-        $scope.getConcerts();
+        $scope.getPlaylists();
       });
     } else {
-      $scope.getConcerts();
+      $scope.getPlaylists();
     }
 
     /// PAGINATION ==========================================

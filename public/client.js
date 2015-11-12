@@ -6,15 +6,19 @@ angular.module('beatssounds', [
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'concertView.html',
-      controller: 'concertController'
+      templateUrl: 'playlists/concerts.html',
+      controller: 'concertsController'
     })
     .when('/loginpage', {
       templateUrl: 'loginView.html'
     })
     .when('/playlists', {
-      templateUrl: 'concertView.html',
-      controller: 'concertController'
+      templateUrl: 'playlists/concerts.html',
+      controller: 'concertsController'
+    })
+    .when('/following', {
+      templateUrl: 'playlists/concerts.html',
+      controller: 'concertsController'
     })
     .otherwise({
       redirectTo: '/'
