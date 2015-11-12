@@ -27,15 +27,17 @@ app.get('/callback', function(req, res) {
 
 app.get('/myconcerts', util.checkToken,
   function(req, res) {
-    console.log(req.query);
+    var location = req.query.location;
     var token = req.session.accessToken;
     var userID = req.session.userID;
     spotify.getPlaylists(token, userID, function(token, userID, playlists) {
       spotify.getTracks(token, userID, playlists, function(tracks) {
         spotify.getArtists(tracks, function(artists) {
-          songkick.findConcerts(function(concerts) {
-            util.findMyConcerts(artists, concerts, function(myShows) {
-              res.json(myShows);
+          songkick.findMyMetroArea(location, function(metroID, metroName) {
+            songkick.findConcerts(metroID, metroName, function(concerts) {
+              util.findMyConcerts(artists, concerts, function(myShows) {
+                res.json(myShows);
+              });
             });
           });
         });

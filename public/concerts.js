@@ -25,7 +25,6 @@ angular.module('beatssounds.concerts', [])
     };
 
     $scope.isFavorite = function(event) {
-      console.log(event)
       return event.myCount > 5 ? 'favorite' : '';
     }
 

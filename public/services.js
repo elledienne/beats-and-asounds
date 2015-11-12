@@ -1,7 +1,7 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
     var getConcerts = function() {
-      var locationData = localStorage.getItem("location");
+      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
           url: '/myconcerts',
