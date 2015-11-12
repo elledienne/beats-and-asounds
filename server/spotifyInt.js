@@ -108,7 +108,7 @@ module.exports.getMyArtists = function(token) {
   });
 }
 
-module.exports.getPlaylists = function(token, userID, callback) {
+module.exports.getPlaylists = function(token, userID) {
   var playlistOptions = {
     url: 'https://api.spotify.com/v1/users/' + userID + '/playlists',
     headers: {
@@ -122,7 +122,7 @@ module.exports.getPlaylists = function(token, userID, callback) {
   });
 };
 
-module.exports.getTracks = function(token, userID, playlists, callback) {
+module.exports.getTracks = function(token, userID, playlists) {
   var playlistPromises = [];
   playlists.forEach(function(playlist) {
     //if playlist is hosted on iTunes and not Spotify, it won't have associated images
@@ -141,7 +141,7 @@ module.exports.getTracks = function(token, userID, playlists, callback) {
   return Promise.all(playlistPromises);
 };
 
-module.exports.getArtists = function(tracks, callback) {
+module.exports.getArtists = function(tracks) {
   var artistPromises = [];
   var artists = {};
   tracks.forEach(function(trackListings) {
