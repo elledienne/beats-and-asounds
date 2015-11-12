@@ -29,6 +29,13 @@ module.exports.checkState = function(req, res, next) {
   }
 };
 
+module.exports.checkToken = function(req, res, next) {
+  if (req.session.accessToken === undefined) {
+    res.end('go to login');
+  } else {
+    next();
+  }
+};
 module.exports.generateSession = function(req, access_token, refresh_token, userID) {
   return new Promise(function(resolve, reject) {
     req.session.regenerate(function() {
@@ -40,13 +47,6 @@ module.exports.generateSession = function(req, access_token, refresh_token, user
   })
 };
 
-module.exports.checkToken = function(req, res, next) {
-  if (req.session.accessToken === undefined) {
-    res.end('go to login');
-  } else {
-    next();
-  }
-};
 
 module.exports.buildPromise = function(options) {
   return new Promise(function(resolve, reject) {
@@ -60,17 +60,6 @@ module.exports.buildPromise = function(options) {
   });
 };
 
-module.exports.buildPostPromise = function(options) {
-  return new Promise(function(resolve, reject) {
-    request.post(options, function(error, respose, body) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(body);
-      }
-    })
-  });
-};
 
 
 module.exports.findMyConcerts = function(artists, concerts, callback) {

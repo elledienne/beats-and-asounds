@@ -9,7 +9,7 @@ var client_id = supersecret.client_id;
 var client_secret = supersecret.client_secret;
 var redirect_uri = 'http://localhost:8888/callback';
 
-module.exports.authorize = function(res) {
+module.exports.authorize = function(req, res) {
   var stateKey = 'spotify_auth_state';
   var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
@@ -24,8 +24,6 @@ module.exports.authorize = function(res) {
       state: state
     }));
 };
-
-
 
 module.exports.getToken = function(code, req, res) {
   var authOptions = {
@@ -42,34 +40,16 @@ module.exports.getToken = function(code, req, res) {
   };
 
   return new Promise(function(resolve, reject) {
-      request.post(authOptions, function(error, response, body) {
-        if (!error && response.statusCode === 200) {
-          var access_token = body.access_token;
-          var refresh_token = body.refresh_token;
-          resolve(access_token, refresh_token);
-        } else {
-          reject();
-        }
-      })
-    })
-    // request.post(authOptions, function(error, response, body) {
-    //   if (!error && response.statusCode === 200) {
-    //     var access_token = body.access_token;
-    //     var refresh_token = body.refresh_token;
-
-  //     module.exports.findUser(access_token, function(access_token, userID) {
-  //       util.generateSession(req, access_token, refresh_token, userID, function() {
-  //         res.redirect('/');
-  //       });
-  //     })
-  //   } else {
-  //     res.redirect('/#' +
-  //       querystring.stringify({
-  //         error: 'invalid_token'
-  //       }));
-  //   }
-  // });
-
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var access_token = body.access_token;
+        var refresh_token = body.refresh_token;
+        resolve(access_token, refresh_token);
+      } else {
+        reject();
+      }
+    });
+  });
 };
 
 module.exports.refreshToken = function(req, res) {
@@ -104,11 +84,7 @@ module.exports.findUser = function(token) {
   };
   return util.buildPromise(authOptions).then(function(body) {
     return body.id;
-  })
-
-  // request.get(authOptions, function(error, response, body) {
-  //   callback(token, body.id);
-  // })
+  });
 };
 
 module.exports.getMyArtists = function(token) {
@@ -120,27 +96,16 @@ module.exports.getMyArtists = function(token) {
     json: true
   }
   return util.buildPromise(followOptions).then(function(body) {
-      var artistsArr = body.artists.items;
-      // TO DO: what if they have more than 50 artists?
-      var artists = {};
-      artistsArr.forEach(function(artist) {
-        artists[artist.name] = {
-          info: artist
-        };
-      })
-      return artists;
+    var artistsArr = body.artists.items;
+    // TO DO: what if they have more than 50 artists?
+    var artists = {};
+    artistsArr.forEach(function(artist) {
+      artists[artist.name] = {
+        info: artist
+      };
     })
-    // request.get(followOptions, function(error, response, body) {
-    //   var artistsArr = body.artists.items;
-    //   // TO DO: what if they have more than 50 artists?
-    //   var artists = {};
-    //   artistsArr.forEach(function(artist) {
-    //     artists[artist.name] = {
-    //       info: artist
-    //     };
-    //   })
-    //   callback(artists);
-    // })
+    return artists;
+  });
 }
 
 module.exports.getPlaylists = function(token, userID, callback) {
