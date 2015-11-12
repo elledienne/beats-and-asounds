@@ -21,28 +21,53 @@ app.get('/login', function(req, res) {
   spotify.authorize(res);
 });
 
-app.get('/callback', function(req, res) {
-  spotify.getToken(req, res);
-});
+app.get('/callback', spotify.checkState,
+  function(req, res) {
+    var code = req.query.code;
+
+    spotify.getToken(code)
+      .then(function(access_token, refresh_token) {
+        return spotify.findUser(access_token)
+          .then(function(userID) {
+            return util.generateSession(req, access_token, refresh_token, userID)
+              .then(function() {
+                res.redirect('/');
+              });
+          })
+          .catch(function(err) {
+            console.log('OH NO (in /callback) ' + err);
+          });
+      })
+      .catch(function() {
+        res.redirect('/#' +
+          querystring.stringify({
+            error: 'invalid_token'
+          }));
+      });
+  });
 
 app.get('/myconcerts', util.checkToken,
   function(req, res) {
-    var location = req.query.location;
+
     var token = req.session.accessToken;
     var userID = req.session.userID;
-    spotify.getPlaylists(token, userID, function(token, userID, playlists) {
-      spotify.getTracks(token, userID, playlists, function(tracks) {
-        spotify.getArtists(tracks, function(artists) {
-          songkick.findMyMetroArea(location, function(metroID, metroName) {
-            songkick.findConcerts(metroID, metroName, function(concerts) {
-              util.findMyConcerts(artists, concerts, function(myShows) {
-                res.json(myShows);
-              });
-            });
-          });
-        });
+    var location = req.query.location;
+
+    spotify.getPlaylists(token, userID)
+      .then(function(playlists) {
+        return spotify.getTracks(token, userID, playlists);
+      }).then(function(tracks) {
+        return spotify.getArtists(tracks);
+      }).then(function(artists) {
+        return songkick.findMyMetroArea(location)
+          .then(function(metroID) {
+            return songkick.findConcerts(metroID);
+          }).then(function(concerts) {
+            return util.findMyConcerts(artists, concerts);
+          }).then(function(myShows) {
+            res.json(myShows);
+          })
       });
-    });
   });
 
 app.get('/suggestedconcerts', util.checkToken,

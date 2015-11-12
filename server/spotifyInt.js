@@ -25,8 +25,8 @@ module.exports.authorize = function(res) {
     }));
 };
 
-module.exports.getToken = function(req, res) {
-  var code = req.query.code || null;
+
+module.exports.checkState = function(req, res, next) {
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
@@ -37,37 +37,53 @@ module.exports.getToken = function(req, res) {
       }));
   } else {
     res.clearCookie(stateKey);
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: redirect_uri,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-      },
-      json: true
-    };
-
-    request.post(authOptions, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-        var access_token = body.access_token;
-        var refresh_token = body.refresh_token;
-
-        module.exports.findUser(access_token, function(access_token, userID) {
-          util.generateSession(req, access_token, refresh_token, userID, function() {
-            res.redirect('/');
-          });
-        })
-      } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
-      }
-    });
+    next();
   }
+}
+
+module.exports.getToken = function(code, req, res) {
+  var authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    form: {
+      code: code,
+      redirect_uri: redirect_uri,
+      grant_type: 'authorization_code'
+    },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
+    json: true
+  };
+
+  return new Promise(function(resolve, reject) {
+      request.post(authOptions, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+          var access_token = body.access_token;
+          var refresh_token = body.refresh_token;
+          resolve(access_token, refresh_token);
+        } else {
+          reject();
+        }
+      })
+    })
+    // request.post(authOptions, function(error, response, body) {
+    //   if (!error && response.statusCode === 200) {
+    //     var access_token = body.access_token;
+    //     var refresh_token = body.refresh_token;
+
+  //     module.exports.findUser(access_token, function(access_token, userID) {
+  //       util.generateSession(req, access_token, refresh_token, userID, function() {
+  //         res.redirect('/');
+  //       });
+  //     })
+  //   } else {
+  //     res.redirect('/#' +
+  //       querystring.stringify({
+  //         error: 'invalid_token'
+  //       }));
+  //   }
+  // });
+
 };
 
 module.exports.refreshToken = function(req, res) {
@@ -92,7 +108,7 @@ module.exports.refreshToken = function(req, res) {
   });
 }
 
-module.exports.findUser = function(token, callback) {
+module.exports.findUser = function(token) {
   var authOptions = {
     url: 'https://api.spotify.com/v1/me',
     headers: {
@@ -100,12 +116,16 @@ module.exports.findUser = function(token, callback) {
     },
     json: true
   };
-  request.get(authOptions, function(error, response, body) {
-    callback(token, body.id);
+  return util.buildPromise(authOptions).then(function(body) {
+    return body.id;
   })
+
+  // request.get(authOptions, function(error, response, body) {
+  //   callback(token, body.id);
+  // })
 };
 
-module.exports.getMyArtists = function(token, callback) {
+module.exports.getMyArtists = function(token) {
   var followOptions = {
     url: 'https://api.spotify.com/v1/me/following?type=artist&limit=50',
     headers: {
@@ -113,17 +133,28 @@ module.exports.getMyArtists = function(token, callback) {
     },
     json: true
   }
-  request.get(followOptions, function(error, response, body) {
-    var artistsArr = body.artists.items;
-    // TO DO: what if they have more than 50 artists?
-    var artists = {};
-    artistsArr.forEach(function(artist) {
-      artists[artist.name] = {
-        info: artist
-      };
+  return util.buildPromise(followOptions).then(function(body) {
+      var artistsArr = body.artists.items;
+      // TO DO: what if they have more than 50 artists?
+      var artists = {};
+      artistsArr.forEach(function(artist) {
+        artists[artist.name] = {
+          info: artist
+        };
+      })
+      return artists;
     })
-    callback(artists);
-  })
+    // request.get(followOptions, function(error, response, body) {
+    //   var artistsArr = body.artists.items;
+    //   // TO DO: what if they have more than 50 artists?
+    //   var artists = {};
+    //   artistsArr.forEach(function(artist) {
+    //     artists[artist.name] = {
+    //       info: artist
+    //     };
+    //   })
+    //   callback(artists);
+    // })
 }
 
 module.exports.getPlaylists = function(token, userID, callback) {
@@ -134,9 +165,10 @@ module.exports.getPlaylists = function(token, userID, callback) {
     },
     json: true
   };
-  request.get(playlistOptions, function(error, response, body) {
-    callback(token, userID, body.items);
-  })
+
+  return util.buildPromise(playlistOptions).then(function(body) {
+    return body.items
+  });
 };
 
 module.exports.getTracks = function(token, userID, playlists, callback) {
@@ -155,10 +187,7 @@ module.exports.getTracks = function(token, userID, playlists, callback) {
       playlistPromises.push(util.buildPromise(trackOptions));
     }
   });
-  Promise.all(playlistPromises)
-    .then(function(tracks) {
-      callback(tracks);
-    })
+  return Promise.all(playlistPromises);
 };
 
 module.exports.getArtists = function(tracks, callback) {
@@ -184,12 +213,12 @@ module.exports.getArtists = function(tracks, callback) {
       });
     }
   });
-  Promise.all(artistPromises)
+  return Promise.all(artistPromises)
     .then(function(artistObjs) {
       artistObjs.forEach(function(artistObj) {
         artists[artistObj.name].info = artistObj;
       });
-      callback(artists);
+      return artists;
     });
 
 };
