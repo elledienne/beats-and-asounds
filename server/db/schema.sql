@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `performer`;
     
 CREATE TABLE `performer` (
   -- As for concert table: we are reusing the SongKick id
-  `performer_id` INTEGER(8) UNIQUE NOT NULL,
+  `performer_id` INTEGER(8) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `uri` VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`performer_id`)
@@ -83,7 +83,7 @@ CREATE TABLE `metroarea` (
   -- Guess where are we taking this id :)
   `sk_id` INTEGER(15) NOT NULL,
   `area` VARCHAR(100) DEFAULT NULL,
-  `location` VARCHAR(150) DEFAULT NULL,
+  -- `location` VARCHAR(150) DEFAULT NULL,
   PRIMARY KEY (`sk_id`)
 );
 
