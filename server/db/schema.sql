@@ -1,0 +1,116 @@
+/*  Execute this file from the command line by typing:
+ *    mysql -u root < server/db/schema.sql
+ *  to create the database and the tables.
+ *  
+ *  TODO: ADD THIS COMMAND TO GRUNT!!
+ */
+
+CREATE DATABASE chubbySongDB;
+
+USE chubbySongDB;
+
+-- ---
+-- If you need to delete/edit/whatever a table that is linked to another table
+-- you need to uncomment the line below, otherwise MySQL will not allow you to do that
+-- ---
+
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
+-- Table 'concert'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `concert`;
+    
+CREATE TABLE `concert` (
+  -- By the way: sk stands for SongKick, we are using theyr id to maintain consistency between our and their data :)
+  `sk_id` INTEGER(8) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(30) DEFAULT 'Concert',
+  `uri` VARCHAR(100) NOT NULL,
+  `datetime` VARCHAR(35) NOT NULL,
+  `popularity` FLOAT DEFAULT 0,
+  --`age_restrictions` // TODO: Check where/if is this guy in the response?
+  `venue_id` INTEGER(8) NOT NULL,
+  `headline_id` INTEGER(8) DEFAULT NULL,
+  `metroarea_id` INTEGER(15) NOT NULL 
+  PRIMARY KEY (`sk_id`),
+  KEY (`type`, `metroarea_id`)
+);
+
+-- ---
+-- Table 'performer'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `performer`;
+    
+CREATE TABLE `performer` (
+  -- As for concert table: we are reusing the SongKick id
+  `sk_id` INTEGER(8) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `uri` VARCHAR(100) DEFAULT NULL
+  PRIMARY KEY (`sk_id`),
+  KEY (`name`)
+);
+
+-- ---
+-- Table 'concert_performer'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `concert_performer`;
+    
+CREATE TABLE `concert_performer` (
+  -- As for concert table: we are reusing the SongKick id
+  `concert_id` INTEGER(8) NOT NULL,
+  `performer_id` INTEGER(8) NOT NULL
+  PRIMARY KEY (`concert_id`),
+  KEY (`performer_id`)
+);
+
+-- ---
+-- Table 'metroarea'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `metroarea`;
+    
+CREATE TABLE `metroarea` (
+  -- Guess where are we taking this id :)
+  `sk_id` INTEGER(15) NOT NULL,
+  `area` VARCHAR(100) DEFAULT NULL,
+  `location` VARCHAR(150) DEFAULT NULL
+  PRIMARY KEY (`sk_id`),
+  KEY (`area`)
+);
+
+-- ---
+-- Table 'venue'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `venue`;
+    
+CREATE TABLE `venue` (
+  -- Yeah, you got it
+  `sk_id` INTEGER(15) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `uri` VARCHAR(255) DEFAULT NULL
+  PRIMARY KEY (`sk_id`)
+  -- The key below is commented because i don't think you'll need 
+  -- to index the table by area, but if you do, just uncomment it
+  -- KEY (`area`)
+);
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `concert` ADD FOREIGN KEY (sk_id) REFERENCES `concert_performer` (`concert_id`);
+ALTER TABLE `performer` ADD FOREIGN KEY (sk_id) REFERENCES `concert_performer` (`performer_id`);
+
+ALTER TABLE `concert` ADD FOREIGN KEY (headline_id) REFERENCES `performer` (`sk_id`);
+ALTER TABLE `concert` ADD FOREIGN KEY (metroarea_id) REFERENCES `metroarea` (`sk_id`);
+ALTER TABLE `concert` ADD FOREIGN KEY (venue_id) REFERENCES `venue` (`sk_id`);
