@@ -1,20 +1,25 @@
 angular.module('beatssounds', [
   'beatssounds.services',
-  'beatssounds.concerts',
+  'beatssounds.playlists',
+  'beatssounds.following',
   'ngRoute'
 ])
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'concertView.html',
-      controller: 'concertController'
+      templateUrl: 'playlists/playlists.html',
+      controller: 'playlistsController'
     })
     .when('/loginpage', {
       templateUrl: 'loginView.html'
     })
     .when('/playlists', {
-      templateUrl: 'concertView.html',
-      controller: 'concertController'
+      templateUrl: 'playlists/playlists.html',
+      controller: 'playlistsController'
+    })
+    .when('/following', {
+      templateUrl: 'following/following.html',
+      controller: 'followingController'
     })
     .otherwise({
       redirectTo: '/'

@@ -1,10 +1,10 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
-    var getConcerts = function() {
+    var getPlaylists = function() {
       var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
-          url: '/myconcerts',
+          url: '/myconcerts', // change my myplaylists
           params: {
             location: locationData
           }
@@ -18,7 +18,9 @@ angular.module('beatssounds.services', [])
         });
     };
     return {
-      getConcerts: getConcerts
+      getPlaylists: getPlaylists
+      // getFollowing: getFollowing
+      // logout: logout
     };
   })
 

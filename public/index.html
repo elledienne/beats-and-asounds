@@ -24,14 +24,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#/">Playlists</a></li>
-        <li><a href="#/">Following</a></li>
+        <li><a href="#/playlists">Playlists</a></li>
+        <li><a href="#/following">Following</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" ng-model="searchText" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#/">Logout</a></li>
@@ -46,8 +45,9 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="lib/ui-bootstrap-tpls-0.9.0.min.js"></script>
-    <script src="services.js"></script>
-    <script src="concerts.js"></script>
+    <script src="services/services.js"></script>
+    <script src="playlists/playlists.js"></script>
+    <script src="following/following.js"></script>
     <script src="client.js"></script>
   </body>
   <footer>
