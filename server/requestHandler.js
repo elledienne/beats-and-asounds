@@ -30,7 +30,6 @@ module.exports.myConcerts = function(req, res) {
   var token = req.session.accessToken;
   var userID = req.session.userID;
   var location = req.query.location;
-
   spotify.getPlaylists(token, userID)
     .then(function(playlists) {
       return spotify.getTracks(token, userID, playlists);
@@ -46,7 +45,6 @@ module.exports.myConcerts = function(req, res) {
           res.json(myShows);
         })
     });
-
 };
 
 module.exports.suggestedConcerts = function(req, res) {
