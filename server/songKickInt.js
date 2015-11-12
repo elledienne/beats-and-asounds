@@ -3,6 +3,7 @@ var request = require('request');
 var supersecret = require('./config.js');
 var util = require('./utils');
 
+var query = require('./db/dbHelper.js'); 
 var api_key = supersecret.api_key;
 
 module.exports.findConcerts = function(metroID, callback) {
@@ -11,7 +12,7 @@ module.exports.findConcerts = function(metroID, callback) {
     json: true
   };
   return util.buildPromise(songKickOptions).then(function(body) {
-    return dbHelper.insertHandler(body.resultsPage.results);
+    return query.insertHandler(body.resultsPage.results);
   });
 };
 

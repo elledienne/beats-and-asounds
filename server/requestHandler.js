@@ -46,7 +46,11 @@ module.exports.myConcerts = function(req, res) {
         }).then(function(concerts) {
           // here passing the shitty-chubby-result to dbHelper for insertion
           // query.insertHandler(concerts)
-          .then(/**/)
+          //query.insertHandler(concerts)
+          //.then(function(){
+            // retrieve data
+          //});
+
           return util.findMyConcerts(artists, concerts);
         }).then(function(myShows) {
           res.json(myShows);
