@@ -9,7 +9,7 @@ angular.module('beatssounds', ['beatssounds.services', 'beatssounds.concerts', '
     .when('/loginpage', {
       templateUrl: 'loginView.html'
     })
-    .otherwise({
-      redirectTo: '/'
-    })
+  // .otherwise({
+  //   redirectTo: '/'
+  // })
 });

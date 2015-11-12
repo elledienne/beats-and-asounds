@@ -12,10 +12,11 @@ module.exports.generateRandomString = function(length) {
   return text;
 };
 
-module.exports.generateSession = function(req, access_token, refresh_token, callback) {
+module.exports.generateSession = function(req, access_token, refresh_token, userID, callback) {
   req.session.regenerate(function() {
     req.session.accessToken = access_token;
     req.session.refreshToken = refresh_token;
+    req.session.userID = userID;
     callback();
   });
 };
@@ -39,6 +40,7 @@ module.exports.buildPromise = function(options) {
     })
   });
 };
+
 
 module.exports.findMyConcerts = function(artists, concerts, callback) {
   var myShows = [];

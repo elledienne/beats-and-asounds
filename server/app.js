@@ -8,7 +8,6 @@ var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
 
 
-
 var app = express();
 
 app.use(session({
@@ -28,12 +27,14 @@ app.get('/callback', function(req, res) {
 
 app.get('/myconcerts', util.checkToken,
   function(req, res) {
+    var location = req.query.location;
     var token = req.session.accessToken;
-    spotify.findUser(token, function(token, userID) {
-      spotify.getPlaylists(token, userID, function(token, userID, playlists) {
-        spotify.getTracks(token, userID, playlists, function(tracks) {
-          spotify.getArtists(tracks, function(artists) {
-            songkick.findConcerts(function(concerts) {
+    var userID = req.session.userID;
+    spotify.getPlaylists(token, userID, function(token, userID, playlists) {
+      spotify.getTracks(token, userID, playlists, function(tracks) {
+        spotify.getArtists(tracks, function(artists) {
+          songkick.findMyMetroArea(location, function(metroID, metroName) {
+            songkick.findConcerts(metroID, metroName, function(concerts) {
               util.findMyConcerts(artists, concerts, function(myShows) {
                 res.json(myShows);
               });
@@ -42,6 +43,21 @@ app.get('/myconcerts', util.checkToken,
         });
       });
     });
+  });
+
+app.get('/suggestedconcerts', util.checkToken,
+  function(req, res) {
+
+
+  });
+
+app.get('/myartists', util.checkToken,
+  function(req, res) {
+    console.log("in /myartists");
+    spotify.getMyArtists(req.session.accessToken, function(artists) {
+      // songkick stuff;
+    })
+
   });
 
 app.get('/refresh_token', function(req, res) {
