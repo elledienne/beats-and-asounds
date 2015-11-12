@@ -5,6 +5,7 @@
  *  TODO: ADD THIS COMMAND TO GRUNT!!
  */
 
+-- FOR DEPLOYMENT: COMMENT THE LINE BELOW!!
 DROP DATABASE IF EXISTS `chubbySongDB`;
 CREATE DATABASE chubbySongDB;
 
@@ -49,7 +50,7 @@ DROP TABLE IF EXISTS `performer`;
     
 CREATE TABLE `performer` (
   -- As for concert table: we are reusing the SongKick id
-  `performer_id` INTEGER(8) NOT NULL,
+  `performer_id` INTEGER(8) UNIQUE NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `uri` VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`performer_id`)
@@ -126,15 +127,3 @@ ALTER TABLE `concert_performer` ADD INDEX (`performer_id`);
 -- The key below is commented because i don't think you'll need 
 -- to index the table by area, but if you do, just uncomment it
 -- ALTER TABLE `metroarea` ADD INDEX (`area`)
-
-
-
-
-
-
-
-
-
-
-
-
