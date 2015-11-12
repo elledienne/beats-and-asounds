@@ -8,9 +8,9 @@ var supersecret = require('./config.js');
 var client_id = supersecret.client_id;
 var client_secret = supersecret.client_secret;
 var redirect_uri = 'http://localhost:8888/callback';
-var stateKey = 'spotify_auth_state';
 
 module.exports.authorize = function(res) {
+  var stateKey = 'spotify_auth_state';
   var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -26,20 +26,6 @@ module.exports.authorize = function(res) {
 };
 
 
-module.exports.checkState = function(req, res, next) {
-  var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
-
-  if (state === null || state !== storedState) {
-    res.redirect('/#' +
-      querystring.stringify({
-        error: 'state_mismatch'
-      }));
-  } else {
-    res.clearCookie(stateKey);
-    next();
-  }
-}
 
 module.exports.getToken = function(code, req, res) {
   var authOptions = {

@@ -21,7 +21,7 @@ app.get('/login', function(req, res) {
   spotify.authorize(res);
 });
 
-app.get('/callback', spotify.checkState,
+app.get('/callback', util.checkState,
   function(req, res) {
     var code = req.query.code;
 

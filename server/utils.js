@@ -13,6 +13,22 @@ module.exports.generateRandomString = function(length) {
   return text;
 };
 
+module.exports.checkState = function(req, res, next) {
+  var stateKey = 'spotify_auth_state';
+  var state = req.query.state || null;
+  var storedState = req.cookies ? req.cookies[stateKey] : null;
+
+  if (state === null || state !== storedState) {
+    res.redirect('/#' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
+  } else {
+    res.clearCookie(stateKey);
+    next();
+  }
+};
+
 module.exports.generateSession = function(req, access_token, refresh_token, userID) {
   return new Promise(function(resolve, reject) {
     req.session.regenerate(function() {

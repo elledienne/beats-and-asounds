@@ -10,7 +10,6 @@ module.exports.findConcerts = function(metroID, callback) {
     url: 'http://api.songkick.com/api/3.0/metro_areas/' + metroID + '/calendar.json?apikey=' + api_key + '&per_page=all',
     json: true
   };
-
   return util.buildPromise(songKickOptions).then(function(body) {
     return body.resultsPage.results;
   });
