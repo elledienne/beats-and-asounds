@@ -16,6 +16,7 @@
             <div ng-show='isFavorite(event)'>Favorite</div>
               <div>{{findBilling(event.info.name, event.show.performance)}} act, {{parseMonth(event.show.start.date).toLowerCase()}} {{parseDay(event.show.start.date)}} @{{event.show.venue.displayName}}</div>
             <a ng-href='{{event.show.uri}}' class='going'>Check for tickets</a>
+            <a href="#" class="btn btn-primary" role="button">Find Similar</a>
         </div> <!-- thumbnail -->
       </div> <!-- col definition -->
     </div> <!-- ngrepeat -->
@@ -24,5 +25,3 @@
     <pagination total-items="totalItems" items-per-page="itemsPerPage" page="currentPage" ng-change="pageChanged()"></pagination>
   </div>
 </div>
-
-
