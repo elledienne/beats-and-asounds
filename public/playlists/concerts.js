@@ -8,14 +8,6 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       return time.parseDay(date);
     };
 
-    $scope.focusIn = function() {
-      this.focus = 'selected';
-    };
-
-    $scope.focusOut = function() {
-      this.focus = '';
-    };
-
     $scope.findBilling = function(name, acts) {
       for (var i = 0; i < acts.length; i++) {
         if (acts[i].displayName === name) {
@@ -28,16 +20,37 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       return event.myCount > 5 ? 'favorite' : '';
     }
 
+    /// GET BASED ON PLAYLISTS ===============================
     $scope.getPlaylists = function() {
       this.isLoading = true;
       auth.getPlaylists().then(function(resp) {
         $scope.isLoading = false;
         $scope.data = resp;
         $scope.paginate();
-        // $scope.pageCounter();
       })
     };
 
+    /// GET BASED ON FOLLOWING ===============================
+    $scope.getPlaylists = function() {
+      this.isLoading = true;
+      auth.getFollowing().then(function(resp) {
+        $scope.isLoading = false;
+        $scope.data = resp;
+        $scope.paginate();
+      })
+    };
+
+    /// FIND SIMILAR BASED ON ARTIST ========================
+    $scope.getSimilar = function (artist) {
+      this.isLoading = true;
+      auth.getSimilar(artist).then (function (resp) {
+        $scope.isLoading = false;
+        $scope.data = resp;
+        $scope.paginate();
+      })
+    };
+
+    /// LOCATION DETECTION ==================================
     if (!localStorage.getItem('location')) {
       space.findLocation(function() {
         $scope.getPlaylists();
@@ -50,9 +63,6 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
     $scope.itemsPerPage = 4
     $scope.currentPage = 1;
 
-    $scope.pageCount = function () {
-      return Math.ceil($scope.data.length / $scope.itemsPerPage);
-    };
 
     $scope.paginate = function () {
       $scope.totalItems = $scope.data.length;
