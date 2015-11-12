@@ -8,9 +8,9 @@ var supersecret = require('./config.js');
 var client_id = supersecret.client_id;
 var client_secret = supersecret.client_secret;
 var redirect_uri = 'http://localhost:8888/callback';
-var stateKey = 'spotify_auth_state';
 
-module.exports.authorize = function(res) {
+module.exports.authorize = function(req, res) {
+  var stateKey = 'spotify_auth_state';
   var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -25,49 +25,31 @@ module.exports.authorize = function(res) {
     }));
 };
 
-module.exports.getToken = function(req, res) {
-  var code = req.query.code || null;
-  var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
+module.exports.getToken = function(code) {
+  var authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    form: {
+      code: code,
+      redirect_uri: redirect_uri,
+      grant_type: 'authorization_code'
+    },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
+    json: true
+  };
 
-  if (state === null || state !== storedState) {
-    res.redirect('/#' +
-      querystring.stringify({
-        error: 'state_mismatch'
-      }));
-  } else {
-    res.clearCookie(stateKey);
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: redirect_uri,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-      },
-      json: true
-    };
-
+  return new Promise(function(resolve, reject) {
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token;
         var refresh_token = body.refresh_token;
-
-        module.exports.findUser(access_token, function(access_token, userID) {
-          util.generateSession(req, access_token, refresh_token, userID, function() {
-            res.redirect('/');
-          });
-        })
+        resolve(access_token, refresh_token);
       } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
+        reject();
       }
     });
-  }
+  });
 };
 
 module.exports.refreshToken = function(req, res) {
@@ -92,7 +74,7 @@ module.exports.refreshToken = function(req, res) {
   });
 }
 
-module.exports.findUser = function(token, callback) {
+module.exports.findUser = function(token) {
   var authOptions = {
     url: 'https://api.spotify.com/v1/me',
     headers: {
@@ -100,12 +82,12 @@ module.exports.findUser = function(token, callback) {
     },
     json: true
   };
-  request.get(authOptions, function(error, response, body) {
-    callback(token, body.id);
-  })
+  return util.buildPromise(authOptions).then(function(body) {
+    return body.id;
+  });
 };
 
-module.exports.getMyArtists = function(token, callback) {
+module.exports.getMyArtists = function(token) {
   var followOptions = {
     url: 'https://api.spotify.com/v1/me/following?type=artist&limit=50',
     headers: {
@@ -113,7 +95,7 @@ module.exports.getMyArtists = function(token, callback) {
     },
     json: true
   }
-  request.get(followOptions, function(error, response, body) {
+  return util.buildPromise(followOptions).then(function(body) {
     var artistsArr = body.artists.items;
     // TO DO: what if they have more than 50 artists?
     var artists = {};
@@ -122,11 +104,11 @@ module.exports.getMyArtists = function(token, callback) {
         info: artist
       };
     })
-    callback(artists);
-  })
+    return artists;
+  });
 }
 
-module.exports.getPlaylists = function(token, userID, callback) {
+module.exports.getPlaylists = function(token, userID) {
   var playlistOptions = {
     url: 'https://api.spotify.com/v1/users/' + userID + '/playlists',
     headers: {
@@ -134,12 +116,13 @@ module.exports.getPlaylists = function(token, userID, callback) {
     },
     json: true
   };
-  request.get(playlistOptions, function(error, response, body) {
-    callback(token, userID, body.items);
-  })
+
+  return util.buildPromise(playlistOptions).then(function(body) {
+    return body.items
+  });
 };
 
-module.exports.getTracks = function(token, userID, playlists, callback) {
+module.exports.getTracks = function(token, userID, playlists) {
   var playlistPromises = [];
   playlists.forEach(function(playlist) {
     //if playlist is hosted on iTunes and not Spotify, it won't have associated images
@@ -155,13 +138,10 @@ module.exports.getTracks = function(token, userID, playlists, callback) {
       playlistPromises.push(util.buildPromise(trackOptions));
     }
   });
-  Promise.all(playlistPromises)
-    .then(function(tracks) {
-      callback(tracks);
-    })
+  return Promise.all(playlistPromises);
 };
 
-module.exports.getArtists = function(tracks, callback) {
+module.exports.getArtists = function(tracks) {
   var artistPromises = [];
   var artists = {};
   tracks.forEach(function(trackListings) {
@@ -184,12 +164,12 @@ module.exports.getArtists = function(tracks, callback) {
       });
     }
   });
-  Promise.all(artistPromises)
+  return Promise.all(artistPromises)
     .then(function(artistObjs) {
       artistObjs.forEach(function(artistObj) {
         artists[artistObj.name].info = artistObj;
       });
-      callback(artists);
+      return artists;
     });
 
 };

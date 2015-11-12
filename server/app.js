@@ -1,11 +1,11 @@
 var express = require('express');
-var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
+var requestHandler = require('./requestHandler.js');
 
 
 var app = express();
@@ -18,45 +18,27 @@ app.use(express.static(__dirname + '/../public'))
   .use(cookieParser());
 
 app.get('/login', function(req, res) {
-  spotify.authorize(res);
+  spotify.authorize(req, res);
 });
 
-app.get('/callback', function(req, res) {
-  spotify.getToken(req, res);
-});
+app.get('/callback', util.checkState,
+  function(req, res) {
+    requestHandler.callback(req, res);
+  });
 
 app.get('/myconcerts', util.checkToken,
   function(req, res) {
-    var location = req.query.location;
-    var token = req.session.accessToken;
-    var userID = req.session.userID;
-    spotify.getPlaylists(token, userID, function(token, userID, playlists) {
-      spotify.getTracks(token, userID, playlists, function(tracks) {
-        spotify.getArtists(tracks, function(artists) {
-          songkick.findMyMetroArea(location, function(metroID, metroName) {
-            songkick.findConcerts(metroID, metroName, function(concerts) {
-              util.findMyConcerts(artists, concerts, function(myShows) {
-                res.json(myShows);
-              });
-            });
-          });
-        });
-      });
-    });
+    requestHandler.myConcerts(req, res);
   });
 
 app.get('/suggestedconcerts', util.checkToken,
   function(req, res) {
-
-
+    requestHandler.suggestedConcerts(req, res);
   });
 
 app.get('/myartists', util.checkToken,
   function(req, res) {
-    console.log("in /myartists");
-    spotify.getMyArtists(req.session.accessToken, function(artists) {
-      // songkick stuff;
-    })
+    requestHandler.myArtists(req, res);
 
   });
 
