@@ -11,7 +11,7 @@ module.exports.findConcerts = function(metroID, callback) {
     json: true
   };
   return util.buildPromise(songKickOptions).then(function(body) {
-    return body.resultsPage.results;
+    return dbHelper.insertHandler(body.resultsPage.results);
   });
 };
 

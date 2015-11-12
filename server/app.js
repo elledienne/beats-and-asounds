@@ -8,7 +8,7 @@ var util = require('./utils.js');
 var requestHandler = require('./requestHandler.js');
 
 var db = require('./db/connect.js');
-var query = require('./db/dbHelper.js');
+//var query = require('./db/dbHelper.js');
 
 var app = express();
 

@@ -1,6 +1,7 @@
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
+var query = require('./db/dbHelper.js');
 
 
 module.exports.callback = function(req, res) {
@@ -38,8 +39,14 @@ module.exports.myConcerts = function(req, res) {
     }).then(function(artists) {
       return songkick.findMyMetroArea(location)
         .then(function(metroID) {
+          // check if we have that id
+          //if yes, query for concerts
+          // if no....
           return songkick.findConcerts(metroID);
         }).then(function(concerts) {
+          // here passing the shitty-chubby-result to dbHelper for insertion
+          // query.insertHandler(concerts)
+          .then(/**/)
           return util.findMyConcerts(artists, concerts);
         }).then(function(myShows) {
           res.json(myShows);
