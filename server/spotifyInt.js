@@ -25,7 +25,7 @@ module.exports.authorize = function(req, res) {
     }));
 };
 
-module.exports.getToken = function(code, req, res) {
+module.exports.getToken = function(code) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {

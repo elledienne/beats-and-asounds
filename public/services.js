@@ -48,7 +48,6 @@ angular.module('beatssounds.services', [])
 .factory('space', function() {
   var findLocation = function(callback) {
     if (navigator.geolocation) {
-      console.log("here in geolocation");
       navigator.geolocation.getCurrentPosition(function(position) {
         localStorage.setItem("location", JSON.stringify([position.coords.latitude, position.coords.longitude]));
         callback();

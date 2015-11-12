@@ -1,5 +1,4 @@
 var express = require('express');
-var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
