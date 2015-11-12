@@ -109,3 +109,36 @@ var query = queryStart + queryMiddle + queryEnd
 
 `
 
+### Retrive data from db
+Inserting data it's a little bit complicated, it's true, but makes selecting data very easy (and powerfull).
+
+Let's see how to do that
+
+Query:
+`
+SELECT c.concert_id,
+       c.name,
+       c.type,
+       c.uri,
+       c.datetime,
+       c.popularity,
+       c.venue_id,
+       c.headline,
+       c.metroarea_id,
+       p.name,
+       p.uri,
+       m.area,
+       v.name,
+       v.uri
+       FROM concert AS c 
+  INNER JOIN concert_performer AS cf ON (c.concert_id = cf.concert_id)
+  INNER JOIN performer AS f ON (cd.performer_id = f.performer_id)
+  INNER JOIN metroarea AS m ON (c.metroarea_id = m.sk_id)
+  INNER JOIN venue AS v ON (c.venue_id = v.sk_id);
+`
+
+And (hopefully) that's all :D
+
+
+
+
