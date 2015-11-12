@@ -1,5 +1,6 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
+
     var locationData = JSON.parse(localStorage.getItem("location"));
     var getPlaylists = function() {
       return $http({
