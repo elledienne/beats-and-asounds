@@ -8,12 +8,18 @@ module.exports.insertHandler = function(concerts){
   var concertPromises = [];
   concerts.forEach(function(concert) {
     var performerPromises = [];
-    concert.performers.forEach(function(performer) {
-      var performerQueryString = "INSERT INTO performer (performer_id, name, uri) VALUES (artist.id, artist.displayName, artist.uri)";
-      performerPromises.push(querySync(performerQueryString)
-        .then(function() {
-          var joinTableQueryString = "INSERT INTO concert_performer (concert_id, performer_id) VALUES (concert_id, artist.id)"
-        }));
+    concert.performance.forEach(function(performance) {
+      var performerQueryString = "INSERT INTO performer (performer_id, name, uri) \
+                                  VALUES (?, ?, ?)";
+      var artist = performance.artist;
+      var performerParams = [artist.idm artist.displayName, artist.uri]; // (artist.id, artist.displayName, artist.uri)
+      performerPromises.push(
+        querySync(performerQueryString, performerParams)
+          .then(function() {
+            var joinTableQueryString = "INSERT INTO concert_performer (concert_id, performer_id) VALUES (?, ?)";
+
+          })
+        );
     })
     Promise.all(performerPromises)
     .then(function() {
