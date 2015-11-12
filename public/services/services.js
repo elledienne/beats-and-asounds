@@ -1,10 +1,26 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
-    var getConcerts = function() {
-      var locationData = JSON.parse(localStorage.getItem("location"));
+    var locationData = JSON.parse(localStorage.getItem("location"));
+    var getPlaylists = function() {
       return $http({
           method: 'GET',
-          url: '/myconcerts',
+          url: '/myconcerts', // change my myplaylists
+          params: {
+            location: locationData
+          }
+        })
+        .then(function(resp) {
+          if (resp.data === "go to login") {
+            $location.path('/loginpage');
+          } else {
+            return resp.data;
+          }
+        });
+    };
+    var getFollowing = function() {
+      return $http({
+          method: 'GET',
+          url: '/myconcerts', // change my myfollowing
           params: {
             location: locationData
           }
@@ -18,7 +34,9 @@ angular.module('beatssounds.services', [])
         });
     };
     return {
-      getConcerts: getConcerts
+      getPlaylists: getPlaylists,
+      getFollowing: getFollowing
+      // logout: logout
     };
   })
 
