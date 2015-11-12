@@ -1,5 +1,5 @@
-angular.module('beatssounds.playlists', ['ui.bootstrap'])
-  .controller('playlistsController', function ($scope, auth, time, space) {
+angular.module('beatssounds.concerts', ['ui.bootstrap'])
+  .controller('concertsController', function ($scope, auth, time, space) {
 
     $scope.parseMonth = function(date) {
       return time.parseMonth(date);
