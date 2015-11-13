@@ -65,7 +65,7 @@ If you need more info: http://www.songkick.com/developer/upcoming-events-for-met
 
 As you saw our db uses multiple table to store data in the most efficient way.
 
-All the tables are linked together using foreign keys, this means that you have to follow a specific order when adding data.
+All the tables are linked together using foreign keys, this means that you have to follow a specific order when adding data (not for all the tables, but anyway it's a good idea to skin on this guide)
 
 Below the complete process:
 
@@ -108,23 +108,8 @@ INSERT INTO concert (concert_id, name, type, uri, datetime, popularity, venue_id
 
 JAVASCRIPT:
 
-```javascript
-var queryStart = "INSERT INTO concert_performer (concert_id, performer_id) VALUES";
-var queryMiddle = "";
-
-performersArray.forEach(function(performer, i){
-  queryMiddle += "(concert_id, artist.id)";
-  if(i !== performersArray.length - 1) {
-    queryMiddle += ","; 
-  } else {
-    queryMiddle += ";"; 
-  }
-});
-
-var query = queryStart + queryMiddle + queryEnd
-// Should be something like this
-// INSERT INTO concert_performer (concert_id, performer_id) VALUES (concert_id1, performer_id1), (concert_id2, performer_id2) [...] ;
-
+```sql
+INSERT INTO concert_performer (concert_id, performer_id) VALUES (?, ?)
 ```
 
 ### Retrive data from db
@@ -155,6 +140,14 @@ SELECT c.concert_id,
   INNER JOIN metroarea AS m ON (c.metroarea_id = m.sk_id)
   INNER JOIN venue AS v ON (c.venue_id = v.sk_id);
 ```
+
+### Handling asynchronousity
+
+We know that you know, but just to be sure: **all the DB operations are ASYNC**
+
+In our implementation we handle that using promises ([bluebird](http://bluebirdjs.com/docs/getting-started.html)).
+
+---
 
 And (hopefully) that's all :D
 
