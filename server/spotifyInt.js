@@ -76,7 +76,6 @@ module.exports.refreshToken = function(refresh_token) {
 }
 
 module.exports.findUser = function(token) {
-  console.log(token, "token in find user");
   var authOptions = {
     url: 'https://api.spotify.com/v1/me',
     headers: {
@@ -84,9 +83,7 @@ module.exports.findUser = function(token) {
     },
     json: true
   };
-  console.log("how about here?")
   return util.buildPromise(authOptions).then(function(body) {
-    console.log("or here?")
     return body.id;
   });
 };
@@ -110,7 +107,23 @@ module.exports.getMyArtists = function(token) {
     })
     return artists;
   });
-}
+};
+
+module.exports.getRelatedArtists = function(artistID) {
+  var relatedArtistOptions = {
+    url: 'https://api.spotify.com/v1/artists/' + artistID + '/related-artists',
+    json: true
+  };
+  return util.buildPromise(relatedArtistOptions).then(function(body) {
+    var artists = {};
+    body.artists.forEach(function(artist) {
+      artists[artist.name.toUpperCase()] = {
+        info: artist
+      };
+    })
+    return artists;
+  });
+};
 
 module.exports.getPlaylists = function(token, userID) {
   var playlistOptions = {

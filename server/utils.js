@@ -33,10 +33,12 @@ module.exports.checkState = function(req, res, next) {
 
 module.exports.checkToken = function(req, res, next) {
   if (req.cookies.userID === undefined) {
+    console.log('redirecting to login because cookie is undefined');
     res.end('go to login');
   } else {
     query.fetchToken(req.cookies.userID).then(function(tokenInfo) {
       if (!tokenInfo.length) {
+        console.log('redirecting to login because token is undefined');
         res.end('go to login');
       }
       var currentTime = Date.now() / 60000;

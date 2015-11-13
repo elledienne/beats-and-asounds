@@ -60,7 +60,13 @@ module.exports.myConcerts = function(req, res) {
 };
 
 module.exports.suggestedConcerts = function(req, res) {
+  var location = req.query.location;
+  var artistID = req.query.artistID;
 
+  return spotify.getRelatedArtists(artistID)
+    .then(function(artists) {
+      return module.exports.collectConcerts(location, artists);
+    })
 };
 
 module.exports.myArtists = function(req, res) {
