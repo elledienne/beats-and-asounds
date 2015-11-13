@@ -6,10 +6,10 @@
  */
 
 -- FOR DEPLOYMENT: COMMENT THE LINE BELOW!!
-DROP DATABASE IF EXISTS `chubbySongDB`;
-CREATE DATABASE chubbySongDB;
+DROP DATABASE IF EXISTS `dummydatabase`;
+CREATE DATABASE dummydatabase;
 
-USE chubbySongDB;
+USE dummydatabase;
 
 -- ---
 -- If you need to delete/edit/whatever a table that is linked to another table
@@ -118,6 +118,7 @@ ALTER TABLE `concert_performer` ADD INDEX (`performer_id`);
 -- to index the table by area, but if you do, just uncomment it
 -- ALTER TABLE `metroarea` ADD INDEX (`area`)
 
+
 -- ---
 -- Foreign Keys 
 -- ---
@@ -134,3 +135,13 @@ ALTER TABLE `concert_performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `per
 ALTER TABLE `concert` ADD FOREIGN KEY (`headline_id`) REFERENCES `performer` (`performer_id`);
 ALTER TABLE `concert` ADD FOREIGN KEY (`metroarea_id`) REFERENCES `metroarea` (`sk_id`);
 ALTER TABLE `concert` ADD FOREIGN KEY (`venue_id`) REFERENCES `venue` (`sk_id`);
+
+-- HI LORENZO IM JUST ADDING A USER TABLE FOR MY COOKIES 
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `userID` VARCHAR(30) NOT NULL,
+  `access_token` VARCHAR(300) NOT NULL,
+  `refresh_token` VARCHAR(300)
+);
+

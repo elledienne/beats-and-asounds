@@ -1,7 +1,13 @@
 var session = require('express-session');
 var Promise = require('bluebird');
 var request = require('request');
+
 var query = require('./db/dbHelper.js');
+
+
+var db = require('./db/dummyDataHandler_laura.js');
+
+
 
 module.exports.generateRandomString = function(length) {
   var text = '';
@@ -30,7 +36,7 @@ module.exports.checkState = function(req, res, next) {
 };
 
 module.exports.checkToken = function(req, res, next) {
-  if (req.session.accessToken === undefined) {
+  if (req.cookies.userID === undefined) {
     res.end('go to login');
   } else {
     next();

@@ -1,7 +1,13 @@
+var querystring = require('querystring');
+
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
+
 var query = require('./db/dbHelper.js');
+
+var database = require('./db/dummyDataHandler_laura.js');
+
 
 
 module.exports.callback = function(req, res) {
@@ -10,7 +16,12 @@ module.exports.callback = function(req, res) {
     .then(function(access_token, refresh_token) {
       return spotify.findUser(access_token)
         .then(function(userID) {
-          return util.generateSession(req, access_token, refresh_token, userID)
+          res.cookie("userID", userID, {
+            maxAge: 900000,
+            httpOnly: true
+          });
+          return database.addUserToDatabase(access_token, refresh_token, userID)
+            // return util.generateSession(req, access_token, refresh_token, userID)
             .then(function() {
               res.redirect('/');
             });
@@ -28,33 +39,28 @@ module.exports.callback = function(req, res) {
 };
 
 module.exports.myConcerts = function(req, res) {
-  var token = req.session.accessToken;
-  var userID = req.session.userID;
-  var location = req.query.location;
-  spotify.getPlaylists(token, userID)
-    .then(function(playlists) {
-      return spotify.getTracks(token, userID, playlists);
-    }).then(function(tracks) {
-      return spotify.getArtists(tracks);
-    }).then(function(artists) {
-      return songkick.findMyMetroArea(location)
-        .then(function(metroID) {
-          // check if we have that id
-          //if yes, query for concerts
-          // if no....
-          return songkick.findConcerts(metroID);
-        }).then(function(concerts) {
-          // here passing the shitty-chubby-result to dbHelper for insertion
-          // query.insertHandler(concerts)
-          //query.insertHandler(concerts)
-          //.then(function(){
-            // retrieve data
-          //});
+  database.findUserInDatabase(req.cookies.userID)
+    .then(function(userData) {
 
-          return util.findMyConcerts(artists, concerts);
-        }).then(function(myShows) {
-          res.json(myShows);
-        })
+      var userID = userData[0].userID;
+      var token = userData[0].access_token;
+      var location = req.query.location;
+
+      spotify.getPlaylists(token, userID)
+        .then(function(playlists) {
+          return spotify.getTracks(token, userID, playlists);
+        }).then(function(tracks) {
+          return spotify.getArtists(tracks);
+        }).then(function(artists) {
+          return songkick.findMyMetroArea(location)
+            .then(function(metroID) {
+              return songkick.findConcerts(metroID);
+            }).then(function(concerts) {
+              return util.findMyConcerts(artists, concerts);
+            }).then(function(myShows) {
+              res.json(myShows);
+            });
+        });
     });
 };
 
