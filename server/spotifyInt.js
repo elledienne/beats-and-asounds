@@ -44,17 +44,16 @@ module.exports.getToken = function(code) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token;
         var refresh_token = body.refresh_token;
-        console.log(refresh_token, "refresh");
-        resolve(access_token, refresh_token);
+        var tokens = [access_token, refresh_token];
+        resolve(tokens);
       } else {
-        reject();
+        reject(error);
       }
     });
   });
 };
 
-module.exports.refreshToken = function(req, res) {
-  var refresh_token = req.session.refreshToken;
+module.exports.refreshToken = function(refresh_token) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -67,14 +66,17 @@ module.exports.refreshToken = function(req, res) {
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      res.redirect('/login');
-    }
+  return new Promise(function(resolve, reject) {
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        resolve(body);
+      }
+    });
   });
 }
 
 module.exports.findUser = function(token) {
+  console.log(token, "token in find user");
   var authOptions = {
     url: 'https://api.spotify.com/v1/me',
     headers: {
@@ -82,7 +84,9 @@ module.exports.findUser = function(token) {
     },
     json: true
   };
+  console.log("how about here?")
   return util.buildPromise(authOptions).then(function(body) {
+    console.log("or here?")
     return body.id;
   });
 };
@@ -118,7 +122,6 @@ module.exports.getPlaylists = function(token, userID) {
   };
 
   return util.buildPromise(playlistOptions).then(function(body) {
-    console.log(body, "goddammit")
     return body.items
   });
 };

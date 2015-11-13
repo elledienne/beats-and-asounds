@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 var util = require('../utils.js');
 var db = require('./connect.js');
 var q = require('./queryHelper.js');
+var spotify = require('../spotifyInt.js');
 
 
 var queryAsync = function(queryString, queryParams) {
@@ -52,7 +53,7 @@ module.exports.insertHandler = function(concerts) {
         return queryAsync(q.venue, venueParams);
       })
       .then(function() {
-        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.date, concert.popularity, venue.id, headline_id, metroarea.id];
+        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.date, concert.popularity, venue.id, metroarea.id];
         return queryAsync(q.concert, concertParams);
       })
       .then(function() {
@@ -77,12 +78,25 @@ module.exports.addUserToDatabase = function(access_token, refresh_token, userID)
   return queryAsync(q.userSelect, selectParams)
     .then(function(potentialUser) {
       if (!potentialUser.length) {
-        var insertParams = [access_token, refresh_token, userID];
+        var insertParams = [access_token, refresh_token, userID, Date.now() / 60000];
         return queryAsync(q.userInsert, insertParams);
       } else {
         return;
       }
     });
+};
+
+module.exports.updateUser = function(access_token, refresh_token, userID) {
+  console.log(access_token, refresh_token, userID);
+  var params = refresh_token ? [access_token, refresh_token, Date.now() / 60000, userID] : [access_token, Date.now() / 60000, userID];
+  var queryString = refresh_token ? "UPDATE user SET access_token = ?, refresh_token = ?, created_at = ? WHERE userID = ?" : "UPDATE user SET access_token = ?, created_at = ? WHERE userID = ?"
+  return queryAsync(queryString, params);
+}
+
+module.exports.fetchToken = function(userID) {
+  var params = [userID];
+  var queryString = "SELECT created_at, refresh_token FROM user WHERE userID=?"
+  return queryAsync(queryString, params);
 };
 
 module.exports.findUserInDatabase = function(userID) {

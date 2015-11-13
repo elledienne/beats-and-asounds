@@ -142,6 +142,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `userID` VARCHAR(30) NOT NULL,
   `access_token` VARCHAR(300) NOT NULL,
-  `refresh_token` VARCHAR(300)
+  `refresh_token` VARCHAR(300) NOT NULL,
+  `created_at` INTEGER(30) NOT NULL
 );
 

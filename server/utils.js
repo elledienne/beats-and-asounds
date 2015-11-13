@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var request = require('request');
 
 var query = require('./db/dbHelper.js');
+var spotify = require('./spotifyInt.js')
 
 module.exports.generateRandomString = function(length) {
   var text = '';
@@ -34,7 +35,22 @@ module.exports.checkToken = function(req, res, next) {
   if (req.cookies.userID === undefined) {
     res.end('go to login');
   } else {
-    next();
+    query.fetchToken(req.cookies.userID).then(function(tokenInfo) {
+      if (!tokenInfo.length) {
+        res.end('go to login');
+      }
+      var currentTime = Date.now() / 60000;
+      console.log("token age", currentTime - tokenInfo[0].created_at, "utils.js 43");
+      if (currentTime - tokenInfo[0].created_at > 50) {
+        console.log("refreshing token utils.js 45");
+        return spotify.refreshToken(tokenInfo[0].refresh_token)
+          .then(function(body) {
+            return query.updateUser(body.access_token, body.refresh_token, req.cookies.userID);
+          })
+      }
+    }).then(function() {
+      next();
+    })
   }
 };
 
@@ -61,6 +77,5 @@ module.exports.assembleResponse = function(artists, concerts) {
       myShows.push(artists[event.performer_name.toUpperCase()]);
     }
   });
-  console.log(myShows, "myShows");
   return myShows;
 };
