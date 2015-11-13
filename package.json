@@ -15,5 +15,8 @@
     "node-calendar": "^0.1.4",
     "querystring": "~0.2.0",
     "request": "~2.34.0"
+  },
+  "scripts": {
+    "start": "node server/app.js"
   }
 }
