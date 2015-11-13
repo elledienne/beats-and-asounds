@@ -42,16 +42,6 @@ module.exports.checkToken = function(req, res, next) {
     next();
   }
 };
-module.exports.generateSession = function(req, access_token, refresh_token, userID) {
-  return new Promise(function(resolve, reject) {
-    req.session.regenerate(function() {
-      req.session.accessToken = access_token;
-      req.session.refreshToken = refresh_token;
-      req.session.userID = userID;
-      resolve();
-    });
-  })
-};
 
 
 module.exports.buildPromise = function(options) {
