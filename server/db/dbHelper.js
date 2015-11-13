@@ -53,7 +53,7 @@ module.exports.insertHandler = function(concerts) {
         return queryAsync(q.venue, venueParams);
       })
       .then(function() {
-        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.date, concert.popularity, venue.id, metroarea.id];
+        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.datetime, concert.popularity, venue.id, headline_id, metroarea.id];
         return queryAsync(q.concert, concertParams);
       })
       .then(function() {

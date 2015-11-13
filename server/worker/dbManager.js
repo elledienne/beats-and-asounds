@@ -43,6 +43,10 @@ var updateOldByAreas = function(){
   });
 };
 
+var updateOldByAreas = function(){
+  
+}
+
 module.exports = {
   deleteExpiredEvents: deleteExpiredEvents,
   updateOldByAreas: updateOldByAreas
