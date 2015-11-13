@@ -6,8 +6,6 @@ var util = require('./utils.js');
 
 var query = require('./db/dbHelper.js');
 
-var database = require('./db/dummyDataHandler_laura.js');
-
 
 
 module.exports.callback = function(req, res) {
@@ -20,7 +18,7 @@ module.exports.callback = function(req, res) {
             maxAge: 900000,
             httpOnly: true
           });
-          return database.addUserToDatabase(access_token, refresh_token, userID)
+          return query.addUserToDatabase(access_token, refresh_token, userID)
             // return util.generateSession(req, access_token, refresh_token, userID)
             .then(function() {
               res.redirect('/');
@@ -39,7 +37,7 @@ module.exports.callback = function(req, res) {
 };
 
 module.exports.myConcerts = function(req, res) {
-  database.findUserInDatabase(req.cookies.userID)
+  query.findUserInDatabase(req.cookies.userID)
     .then(function(userData) {
 
       var userID = userData[0].userID;

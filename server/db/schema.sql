@@ -6,11 +6,12 @@
  */
 
 -- FOR DEPLOYMENT: COMMENT THE LINE BELOW!!
-DROP DATABASE IF EXISTS `dummydatabase`;
-CREATE DATABASE dummydatabase;
+DROP DATABASE IF EXISTS `chubbySongDB`;
+CREATE DATABASE chubbySongDB;
 
-USE dummydatabase;
-
+USE chubbySongDB;
+ 
+ 
 -- ---
 -- If you need to delete/edit/whatever a table that is linked to another table
 -- you need to uncomment the line below, otherwise MySQL will not allow you to do that
@@ -136,7 +137,6 @@ ALTER TABLE `concert` ADD FOREIGN KEY (`headline_id`) REFERENCES `performer` (`p
 ALTER TABLE `concert` ADD FOREIGN KEY (`metroarea_id`) REFERENCES `metroarea` (`sk_id`);
 ALTER TABLE `concert` ADD FOREIGN KEY (`venue_id`) REFERENCES `venue` (`sk_id`);
 
--- HI LORENZO IM JUST ADDING A USER TABLE FOR MY COOKIES 
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
