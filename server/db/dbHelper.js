@@ -1,7 +1,6 @@
 var Promise = require('bluebird');
-
 var db = require('./connect.js');
-
+var q = require('./queryHelper.js');
 
 var queryAsync = function(queryString, queryParams) {
   return new Promise(function(resolve, reject) {
@@ -15,56 +14,58 @@ var queryAsync = function(queryString, queryParams) {
   })
 }
 
-module.exports.insertHandler = function(concerts) {
+module.exports.insertHandler = function(concerts){
+
   var concertPromises = [];
+
   concerts.event.forEach(function(concert) {
     var venue = concert.venue;
     var metroarea = venue.metroArea;
-    var headline_id;
-
     var performerPromises = [];
+    
+    var headline_id;
+    var artist;
+    
     concert.performance.forEach(function(performance) {
-      var artist = performance.artist;
-      var performerQueryString = "INSERT IGNORE INTO performer (performer_id, name, uri) \
-                                  VALUES (?, ?, ?)";
-      if (artist.billing === 'headline') {
+      artist = performance.artist;
+      
+      if(artist.billing === 'headline'){
         headline_id = artist.id;
       }
       var performerParams = [artist.id, artist.displayName, artist.uri];
       performerPromises.push(
-        queryAsync(performerQueryString, performerParams)
+        queryAsync(q.performer, performerParams)
       );
     });
 
     return Promise.all(performerPromises)
       .then(function() {
-        var metroAreaQueryString = "INSERT IGNORE INTO metroarea (sk_id, area) VALUES (?, ?)";
         var metroParams = [metroarea.id, metroarea.displayName];
-        return queryAsync(metroAreaQueryString, metroParams);
+        return queryAsync(q.metroarea, metroParams);
       })
       .then(function() {
-        var venueQueryString = "INSERT IGNORE INTO venue (sk_id, name, uri) VALUES (?, ?, ?)";
-        var venueParams = [venue.id, venue.displayName, venue.uri];
-        return queryAsync(venueQueryString, venueParams);
-      })
+        var venueParams =  [venue.id, venue.displayName, venue.uri];
+        return queryAsync(q.venue, venueParams);
+      }) 
       .then(function() {
-        var concertQueryString = "INSERT IGNORE INTO concert (concert_id, name, type, uri, datetime, popularity, venue_id, headline_id, metroarea_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.datetime, concert.popularity, venue.id, headline_id, metroarea.id]; //(id, displayName, type, uri, start.datetime, popularity, venue.id, HEADLINE_ID, metroarea_id)
-        return queryAsync(concertQueryString, concertParams);
+        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.datetime, concert.popularity, venue.id, headline_id, metroarea.id];
+        return queryAsync(q.concert, concertParams);
       })
       .then(function() {
         var joinPromises = [];
+        var artist;
+        var joinParams;
+
         concert.performance.forEach(function(performance) {
-          var artist = performance.artist;
-          var joinTableQueryString = "INSERT IGNORE INTO concert_performer (concert_id, performer_id) VALUES (?, ?)";
-          var joinParams = [concert.id, artist.id];
+          artist = performance.artist;
+          joinParams = [concert.id, artist.id];
           joinPromises.push(
-            queryAsync(joinTableQueryString, joinParams)
+            queryAsync(q.join, joinParams)
           );
         });
         return Promise.all(joinPromises);
-      })
-  })
+      });
+  });
 };
 
 module.exports.addUserToDatabase = function(access_token, refresh_token, userID) {
