@@ -13,31 +13,40 @@ We are implementing thid db because the songkick api is a little bit crappy, inf
 
 The JSON string follows this pattern:
 
-`
+```javascript
 {
   "resultsPage:" {
     "results": { "event": [
       {
         "id":11129128,
         "type":"Concert",
-        "uri":"http://www.songkick.com/concerts/11129128-wild-flag-at-fillmore?utm_source=PARTNER_ID&utm_medium=partner",
+        "uri":"http://www.songkick.com/concerts/and/so/on",
         "displayName":"Wild Flag at The Fillmore (April 18, 2012)",
         "start":{"time":"20:00:00",
                  "date":"2012-04-18",
                  "datetime":"2012-04-18T20:00:00-0800"},
-        "performance":[{"artist":{"uri":"http://www.songkick.com/artists/29835-wild-flag?utm_source=PARTNER_ID&utm_medium=partner",
-                                  "displayName":"Wild Flag","id":29835,"identifier":[]},
+        "performance":[{"artist":{
+                          "uri":"http://www.songkick.com/artists/blablabla",
+                          "displayName":"Wild Flag",
+                          "id":29835,
+                          "identifier":[]
+                        },
                         "displayName":"Wild Flag",
                         "billingIndex":1,
                         "id":21579303,
-                        "billing":"headline"}],
+                        "billing":"headline"
+                       }],
         "location":{"city":"San Francisco, CA, US","lng":-122.4332937,"lat":37.7842398},
         "venue":{"id":6239,
                  "displayName":"The Fillmore",
-                 "uri":"http://www.songkick.com/venues/6239-fillmore?utm_source=PARTNER_ID&utm_medium=partner",
+                 "uri":"http://www.songkick.com/venues/blablabla",
                  "lng":-122.4332937, "lat":37.7842398,
-                 "metroArea":{"uri":"http://www.songkick.com/metro_areas/26330-us-sf-bay-area?utm_source=PARTNER_ID&utm_medium=partner",
-                              "displayName":"SF Bay Area","country":{"displayName":"US"},"id":26330,"state":{"displayName":"CA"}}},
+                 "metroArea":{"uri":"http://www.songkick.com/metro_areas/blablabla",
+                              "displayName":"SF Bay Area",
+                              "country":{"displayName":"US"},
+                              "id":26330,
+                              "state":{"displayName":"CA"}
+                              }}, 
         "status":"ok",
         "popularity":0.012763
       }, ....
@@ -48,7 +57,7 @@ The JSON string follows this pattern:
     "status":"ok"
   }
 }
-`
+```
 
 If you need more info: http://www.songkick.com/developer/upcoming-events-for-metro-area
 
@@ -61,36 +70,45 @@ All the tables are linked together using foreign keys, this means that you have 
 Below the complete process:
 
 1. **Add our artist/artists.**
+
 IMPORTANT: every time you see an id (like performer_id, sk_id, whatever_id) in the db you should now that it's the corrispondent songkick id!
 
 Query:
-`
+
+```sql
 INSERT INTO performer (performer_id, name, uri) VALUES (artist.id, artist.displayName, artist.uri)
-`
+```
 
 2. **Add metroarea**
+
 Query:
-`
+
+```sql
 INSERT INTO metroarea (sk_id, area) VALUES (metroArea.id, metroArea.displayName)
-`
+```
 
 3. **Add venue**
+
 Query:
-`
+```sql
 INSERT INTO venue (sk_id, name, uri) VALUES (venue.id, venue.displayName, venue.uri)
-`
+```
 
 4. **Now that we have all this setted up we can insert our concert**
+
 Query:
-`
+
+```sql
 INSERT INTO concert (concert_id, name, type, uri, datetime, popularity, venue_id, headline_id, metroarea_id) VALUES (id, displayName, type, uri, start.datetime, popularity, venue.id, HEADLINE_ID, metroarea_id)
-`
+```
 
 > HEADLINE_ID is placeholder for the id of the artist that is the headline of the event. You should find this data in some way (looping over the artists array?)
 
 5. **Last step is linking you events with all the artists that ar performing in our join table** (yeah, they can be more than one!)
+
 JAVASCRIPT:
-`
+
+```javascript
 var queryStart = "INSERT INTO concert_performer (concert_id, performer_id) VALUES";
 var queryMiddle = "";
 
@@ -107,7 +125,7 @@ var query = queryStart + queryMiddle + queryEnd
 // Should be something like this
 // INSERT INTO concert_performer (concert_id, performer_id) VALUES (concert_id1, performer_id1), (concert_id2, performer_id2) [...] ;
 
-`
+```
 
 ### Retrive data from db
 Inserting data it's a little bit complicated, it's true, but makes selecting data very easy (and powerfull).
