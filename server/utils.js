@@ -1,7 +1,7 @@
 var session = require('express-session');
 var Promise = require('bluebird');
 var request = require('request');
-
+var query = require('./db/dbHelper.js');
 
 module.exports.generateRandomString = function(length) {
   var text = '';
@@ -63,6 +63,8 @@ module.exports.buildPromise = function(options) {
 
 
 module.exports.findMyConcerts = function(artists, concerts, callback) {
+  query.insertHandler(concerts);
+  console.log('How many times?')
   var myShows = [];
   concerts.event.forEach(function(show) {
     show.performance.forEach(function(performer) {

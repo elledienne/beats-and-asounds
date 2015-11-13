@@ -7,6 +7,8 @@ var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
 var requestHandler = require('./requestHandler.js');
 
+var db = require('./db/connect.js');
+//var query = require('./db/dbHelper.js');   
 
 var app = express();
 
@@ -45,6 +47,9 @@ app.get('/myartists', util.checkToken,
 app.get('/refresh_token', function(req, res) {
   spotify.refreshToken(req, res);
 });
+
+// // Connecting to db, see connect.js for details
+// db.connect();
 
 console.log('Listening on 8888');
 app.listen(8888);

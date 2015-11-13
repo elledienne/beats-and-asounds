@@ -3,14 +3,16 @@ var request = require('request');
 var supersecret = require('./config.js');
 var util = require('./utils');
 
+var query = require('./db/dbHelper.js'); 
 var api_key = supersecret.api_key;
 
 module.exports.findConcerts = function(metroID, callback) {
   var songKickOptions = {
-    url: 'http://api.songkick.com/api/3.0/metro_areas/' + metroID + '/calendar.json?apikey=' + api_key + '&per_page=all',
+    url: 'http://api.songkick.com/api/3.0/metro_areas/' + metroID + '/calendar.json?apikey=' + api_key + '&per_page=2',
     json: true
   };
   return util.buildPromise(songKickOptions).then(function(body) {
+    //query.insertHandler(body.resultsPage.results);
     return body.resultsPage.results;
   });
 };
