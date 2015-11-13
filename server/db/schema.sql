@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS `concert`;
     
 CREATE TABLE `concert` (
   -- We are using their id to maintain consistency between our and their data :)
+  -- `id` INTEGER AUTO_INCREMENT,
   `concert_id` INTEGER(8) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `type` VARCHAR(30) DEFAULT 'Concert',
@@ -49,6 +50,7 @@ CREATE TABLE `concert` (
 DROP TABLE IF EXISTS `performer`;
     
 CREATE TABLE `performer` (
+  -- `id` INTEGER AUTO_INCREMENT,
   -- As for concert table: we are reusing the SongKick id
   `performer_id` INTEGER(8) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -66,6 +68,7 @@ DROP TABLE IF EXISTS `concert_performer`;
     
 CREATE TABLE `concert_performer` (
   -- As for concert table: we are reusing the SongKick id
+  -- `id` INTEGER AUTO_INCREMENT,
   `concert_id` INTEGER(8) NOT NULL,
   `performer_id` INTEGER(8) NOT NULL,
   PRIMARY KEY (`concert_id`)
@@ -103,19 +106,6 @@ CREATE TABLE `venue` (
   
 );
 
--- ---
--- Foreign Keys 
--- ---
-
-ALTER TABLE `concert` ADD FOREIGN KEY (`concert_id`) REFERENCES `concert_performer` (`concert_id`);
--- TODO: Probably the line below is worng, as the logic that is behind it. Figure it out :D
--- For the moment replaced by the next line
--- ALTER TABLE `performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `concert_performer` (`performer_id`);
-ALTER TABLE `concert_performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `performer` (`performer_id`);
-
-ALTER TABLE `concert` ADD FOREIGN KEY (`headline_id`) REFERENCES `performer` (`performer_id`);
-ALTER TABLE `concert` ADD FOREIGN KEY (`metroarea_id`) REFERENCES `metroarea` (`sk_id`);
-ALTER TABLE `concert` ADD FOREIGN KEY (`venue_id`) REFERENCES `venue` (`sk_id`);
 
 -- ---
 -- Tables Indexes
@@ -127,3 +117,20 @@ ALTER TABLE `concert_performer` ADD INDEX (`performer_id`);
 -- The key below is commented because i don't think you'll need 
 -- to index the table by area, but if you do, just uncomment it
 -- ALTER TABLE `metroarea` ADD INDEX (`area`)
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+-- ALTER TABLE `concert` ADD FOREIGN KEY (`concert_id`) REFERENCES `concert_performer` (`concert_id`);
+ALTER TABLE `concert_performer` ADD FOREIGN KEY (`concert_id`) REFERENCES `concert` (`concert_id`);
+ALTER TABLE `concert_performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `performer` (`performer_id`);
+-- TODO: Probably the line below is worng, as the logic that is behind it. Figure it out :D
+-- For the moment replaced by the next line
+-- ALTER TABLE `performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `concert_performer` (`performer_id`);
+-- ALTER TABLE `concert_performer` ADD FOREIGN KEY (`performer_id`) REFERENCES `performer` (`performer_id`);
+
+
+ALTER TABLE `concert` ADD FOREIGN KEY (`headline_id`) REFERENCES `performer` (`performer_id`);
+ALTER TABLE `concert` ADD FOREIGN KEY (`metroarea_id`) REFERENCES `metroarea` (`sk_id`);
+ALTER TABLE `concert` ADD FOREIGN KEY (`venue_id`) REFERENCES `venue` (`sk_id`);

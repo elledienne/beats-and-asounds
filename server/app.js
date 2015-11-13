@@ -48,8 +48,8 @@ app.get('/refresh_token', function(req, res) {
   spotify.refreshToken(req, res);
 });
 
-// Connecting to db, see connect.js for details
-db.connect();
+// // Connecting to db, see connect.js for details
+// db.connect();
 
 console.log('Listening on 8888');
 app.listen(8888);

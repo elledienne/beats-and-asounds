@@ -6,4 +6,7 @@ var dbConncetion = mysql.createConnection({
   database: "chubbySongDB"
 });
 
+// Connecting to db, see connect.js for details
+dbConncetion.connect();
+
 module.exports = dbConncetion;
