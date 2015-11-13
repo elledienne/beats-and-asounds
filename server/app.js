@@ -9,8 +9,6 @@ var songkick = require('./songkickInt.js');
 var util = require('./utils.js');
 var requestHandler = require('./requestHandler.js');
 
-var Thread = require('webworker-threads');
-
 var app = express();
 
 app.use(express.static(__dirname + '/../public'))
