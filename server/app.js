@@ -61,7 +61,7 @@ app.use(function(req, res, next) {
 
 var workerJob = new CronJob('*/30 * * * * *', function(){
     // This runs every 30
-    console.log('a')
+    console.log('a');
     dbManager.deleteExpiredEvents();
     dbManager.updateOldByAreas();
     workerJob.stop();
