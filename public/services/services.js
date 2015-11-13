@@ -10,7 +10,7 @@ angular.module('beatssounds.services', [])
             location: locationData
           }
         })
-        .then(function(resp) {
+        .then(function (resp) {
           if (resp.data === "go to login") {
             $location.path('/loginpage');
           } else {
@@ -26,7 +26,7 @@ angular.module('beatssounds.services', [])
             location: locationData
           }
         })
-        .then(function(resp) {
+        .then(function (resp) {
           if (resp.data === "go to login") {
             $location.path('/loginpage');
           } else {
@@ -34,9 +34,26 @@ angular.module('beatssounds.services', [])
           }
         });
     };
+    var getSimilar = function (artist) {
+      return $http({
+        method: 'GET',
+        url: '/myconcerts', // change to correct url
+        params: {
+          artist: artist
+        }
+      })
+      .then(function (resp) {
+        if (resp.data === "go to login") {
+          $location.path('/loginpage');
+        } else {
+          return resp.data;
+        }
+      });
+    };
     return {
       getPlaylists: getPlaylists,
-      getFollowing: getFollowing
+      getFollowing: getFollowing,
+      getSimilar: getSimilar
       // logout: logout
     };
   })

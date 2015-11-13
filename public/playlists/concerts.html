@@ -2,10 +2,39 @@
   <img class='loadingGif' src='assets/spinny.gif'></img><br> 
   Finding your concerts...
 </div>
-<div ng-controller='concertsController'> 
-  <h4 ng-hide='isLoading'>Showing {{showing}} of {{data.length}} events in your area</h4>
+<div>
+<!-- NAV BAR -->
+  <nav ng-if='isLoading==false' class="navbar navbar-default">
+    <div class="container-fluid">
+  <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+        <a class="navbar-brand" href="#/">&#9835;</a>
+      </div>
 
-  <div class="row">
+  <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="#/playlists" ng-click='getPlaylists()'>Playlists</a></li>
+          <li><a href="#/following" ng-click='getFollowing()'>Following</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="searchText" placeholder="Search">
+          </div>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#/">Logout</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+    <!-- END NAV BAR  -->
+  <h4 ng-if='isLoading==false'>Showing {{showing}} of {{data.length}} events in your area</h4>
+<!-- THUMBNAILS FOR CONCERTS -->
+  <div ng-if='isLoading==false' class="row">
     <div ng-repeat='event in filteredEvents | filter:searchText | orderBy:"show.start.date"'>
       <div class="col-sm-5 col-md-3">
         <div class="thumbnail">
@@ -15,14 +44,13 @@
             <h3>{{event.info.name}}</h3>
             <div ng-show='isFavorite(event)'>Favorite</div>
               <div>{{findBilling(event.info.name, event.show.performance)}} act, {{parseMonth(event.show.start.date).toLowerCase()}} {{parseDay(event.show.start.date)}} @{{event.show.venue.displayName}}</div>
-            <a ng-href='{{event.show.uri}}' class='going'>Check for tickets</a>
-        </div> <!-- thumbnail -->
-      </div> <!-- col definition -->
-    </div> <!-- ngrepeat -->
-  </div> <!-- row -->
-  <div class='text-center'>
-    <pagination total-items="totalItems" items-per-page="itemsPerPage" page="currentPage" ng-change="pageChanged()"></pagination>
+            <a ng-href='#' ng-click='getSimilar(event.info.name)' class='going'>Find similar</a>
+           <p><a href="{{event.show.uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
+        </div> <!-- end thumbnail -->
+      </div> <!-- end col definition -->
+    </div> <!-- end ngrepeat -->
+  </div> <!-- end thumbnail row -->
+  <div ng-if='isLoading==false' class='text-center'>
+    <pagination total-items="totalItems" items-per-page="itemsPerPage" page="currentPage"></pagination>
   </div>
 </div>
-
-
