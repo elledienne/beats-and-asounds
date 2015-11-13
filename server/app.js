@@ -70,7 +70,7 @@ var workerJob = new CronJob('*/30 * * * * *', function(){
   },
   true, /* Start the job right now */
   timeZone = 'America/Los_Angeles' /* Time zone of this job. */
-)
+);
 
 console.log('Listening on 8888');
 app.listen(8888);
