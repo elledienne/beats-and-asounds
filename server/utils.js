@@ -1,6 +1,7 @@
 var session = require('express-session');
 var Promise = require('bluebird');
 var request = require('request');
+
 var query = require('./db/dbHelper.js');
 
 module.exports.generateRandomString = function(length) {
@@ -30,21 +31,11 @@ module.exports.checkState = function(req, res, next) {
 };
 
 module.exports.checkToken = function(req, res, next) {
-  if (req.session.accessToken === undefined) {
+  if (req.cookies.userID === undefined) {
     res.end('go to login');
   } else {
     next();
   }
-};
-module.exports.generateSession = function(req, access_token, refresh_token, userID) {
-  return new Promise(function(resolve, reject) {
-    req.session.regenerate(function() {
-      req.session.accessToken = access_token;
-      req.session.refreshToken = refresh_token;
-      req.session.userID = userID;
-      resolve();
-    });
-  })
 };
 
 
@@ -64,7 +55,6 @@ module.exports.buildPromise = function(options) {
 
 module.exports.findMyConcerts = function(artists, concerts, callback) {
   query.insertHandler(concerts);
-  console.log('How many times?')
   var myShows = [];
   concerts.event.forEach(function(show) {
     show.performance.forEach(function(performer) {

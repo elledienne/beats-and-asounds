@@ -1,6 +1,5 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
 
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
@@ -11,10 +10,6 @@ var db = require('./db/connect.js');
 //var query = require('./db/dbHelper.js');   
 
 var app = express();
-
-app.use(session({
-  secret: "super secret string"
-}));
 
 app.use(express.static(__dirname + '/../public'))
   .use(cookieParser());
