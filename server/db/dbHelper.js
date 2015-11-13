@@ -91,22 +91,19 @@ module.exports.findUserInDatabase = function(userID) {
 };
 
 module.exports.checkForMetroID = function(metroID) {
-  console.log(metroID);
   var params = [metroID];
   return queryAsync(q.metroFetch, params);
 };
 
 module.exports.fetchShows = function(artists, metroID) {
-  console.log("here");
   var concertPromises = []
   for (artist in artists) {
-    console.log(artist, "artist");
     var params = [metroID, artist];
-    concertPromises.push(queryAsync(q.concert, params))
+    concertPromises.push(queryAsync(q.concertFetch, params))
   }
   return Promise.all(concertPromises).then(function(concerts) {
     var toSend = _.flatten(concerts);
-    util.assembleResponse(artists, toSend);
+    return util.assembleResponse(artists, toSend);
   });
 
-}
+};

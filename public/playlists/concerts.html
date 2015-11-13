@@ -41,10 +41,9 @@
             <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
           </div>
             <h3>{{event.info.name}}</h3>
-            <div ng-show='isFavorite(event)'>Favorite</div>
-              <div>{{findBilling(event.info.name, event.show.performance)}} act, {{parseMonth(event.show.start.date).toLowerCase()}} {{parseDay(event.show.start.date)}} @{{event.show.venue.displayName}}</div>
-            <a ng-href='#' ng-click='getSimilar(event.info.name)' class='going'>Find similar</a>
-           <p><a href="{{event.show.uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
+              <div>{{parseMonth(event.show.datetime)}},{{parseDay(event.show.datetime)}} @ {{event.show.venue_name}} (headline)</div>
+            <a ng-href='#' ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
+           <p><a href="{{event.show.RowDataPacket.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
         </div> <!-- end thumbnail -->
       </div> <!-- end col definition -->
     </div> <!-- end ngrepeat -->

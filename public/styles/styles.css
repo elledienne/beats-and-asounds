@@ -1,11 +1,14 @@
-#login, .loading {
-  display: block;
-  text-align: center;
-  margin: 0 auto;
-  padding-top: 70px;
-}
+/*Standard Element Styles======================================*/
 body {
+  width: 100%;
+  height: 100%;
   font-family: 'Raleway', sans-serif;
+  color: black;
+  background-color: white;
+}
+html {
+    width: 100%;
+    height: 100%;
 }
 
 h1 {
@@ -25,23 +28,107 @@ h4 {
   font-style: italic;
   margin-left: 15px;
 }
+footer {
+    padding: 50px 0;
+    font-family: 'Raleway', sans-serif;
+    margin: 0 0 25px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+/*Login Page Styles======================================*/
+.intro {
+    display: table;
+    width: 100%;
+    height: auto;
+    padding: 100px 0;
+    text-align: center;
+    color: #fff;
+    font-family: 'Raleway', sans-serif;
+    background: url(../assets/intro-bg.jpg) no-repeat bottom center scroll;
+    background-color: #000;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.intro .intro-body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.intro .intro-body .brand-heading {
+    font-size: 40px;
+}
+
+.intro .intro-body .intro-text {
+    font-size: 18px;
+}
+
+@media(min-width:768px) {
+    .intro {
+        height: 100%;
+        padding: 0;
+    }
+
+    .intro .intro-body .brand-heading {
+        font-size: 100px;
+    }
+
+    .intro .intro-body .intro-text {
+        font-size: 26px;
+    }
+}
+
+.btn-circle {
+    width: 100px;
+    height: 100px;
+    margin-top: 15px;
+    padding: 7px 16px;
+    border: 2px solid #81b71a;
+    border-radius: 100%!important;
+    font-size: 40px;
+    color: #fff;
+    background: 0 0;
+    -webkit-transition: background .3s ease-in-out;
+    -moz-transition: background .3s ease-in-out;
+    transition: background .3s ease-in-out;
+}
+
+.btn-circle:hover,
+.btn-circle:focus {
+    outline: 0;
+    color: #fff;
+    background-image: url('../assets/spotify.jpg');
+    background-size: cover;
+}
+
+
+/*Custom Element Styles======================================*/
+#login, .loading {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 70px;
+}
+
 .btn {
   display: block;
   margin: 0 auto;
 }
 
-.loginBtn {
+.SGLogo {
   width: 150px;
-  height: 150px;
-  border: none;
-  border-radius: 150px;
-  background-color: none;
-  background-image: url('../assets/spotify.jpg');
+  height: auto;
+  display: inline-block;
+  float: none;
 }
 
 .loadingGif {
   width: 150px;
 }
+
 .artistImg {
   width: 250px;
 }

@@ -2,8 +2,8 @@
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
 
-    var locationData = JSON.parse(localStorage.getItem("location"));
     var getPlaylists = function() {
+    var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
           url: '/myconcerts', // change to /myplaylists
@@ -20,6 +20,7 @@ angular.module('beatssounds.services', [])
         });
     };
     var getFollowing = function() {
+    var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
           url: '/myconcerts', // change to /myfollowing
@@ -36,6 +37,7 @@ angular.module('beatssounds.services', [])
         });
     };
     var getSimilar = function (artist) {
+    var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
         method: 'GET',
         url: '/myconcerts', // change to /similar
