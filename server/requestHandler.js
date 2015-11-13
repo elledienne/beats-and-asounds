@@ -12,7 +12,7 @@ module.exports.callback = function(req, res) {
   var code = req.query.code;
   spotify.getToken(code)
     .then(function(access_token, refresh_token) {
-      return spotify.findUser(access_token)
+      return spotify.findUser(access_token, refresh_token)
         .then(function(userID) {
           res.cookie("userID", userID, {
             maxAge: 900000,

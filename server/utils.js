@@ -61,5 +61,6 @@ module.exports.assembleResponse = function(artists, concerts) {
       myShows.push(artists[event.performer_name.toUpperCase()]);
     }
   });
+  console.log(myShows, "myShows");
   return myShows;
 };

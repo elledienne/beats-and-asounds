@@ -44,6 +44,7 @@ module.exports.getToken = function(code) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token;
         var refresh_token = body.refresh_token;
+        console.log(refresh_token, "refresh");
         resolve(access_token, refresh_token);
       } else {
         reject();
@@ -68,7 +69,6 @@ module.exports.refreshToken = function(req, res) {
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      req.session.accessToken = body.access_token;
       res.redirect('/login');
     }
   });
@@ -118,6 +118,7 @@ module.exports.getPlaylists = function(token, userID) {
   };
 
   return util.buildPromise(playlistOptions).then(function(body) {
+    console.log(body, "goddammit")
     return body.items
   });
 };
