@@ -31,7 +31,7 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
     };
 
     /// GET BASED ON FOLLOWING ===============================
-    $scope.getPlaylists = function() {
+    $scope.getFollowing = function() {
       $scope.isLoading = true;
       auth.getFollowing().then(function(resp) {
         $scope.isLoading = false;
@@ -41,9 +41,9 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
     };
 
     /// GET BASED ON SIMILAR ARTISTS ========================
-    $scope.getSimilar = function (artist) {
+    $scope.getSimilar = function (artist_id) {
       $scope.isLoading = true;
-      auth.getSimilar(artist).then (function (resp) {
+      auth.getSimilar(artist_id).then (function (resp) {
         $scope.isLoading = false;
         $scope.data = resp;
         $scope.paginate();

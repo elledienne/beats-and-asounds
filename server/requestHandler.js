@@ -63,9 +63,10 @@ module.exports.myConcerts = function(req, res) {
                 }).then(function() {
                   console.log(artists, 'artists before pass to fetch')
                   return query.fetchShows(artists, metroID);
+                }).then(function(myShows) {
+                  console.log(myShows, "here");
+                  res.json(myShows);
                 })
-            }).then(function(myShows) {
-              res.json(myShows);
             });
         });
     });
