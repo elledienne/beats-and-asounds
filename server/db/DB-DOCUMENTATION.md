@@ -133,7 +133,8 @@ Inserting data it's a little bit complicated, it's true, but makes selecting dat
 Let's see how to do that
 
 Query:
-`
+
+```javascript
 SELECT c.concert_id,
        c.name,
        c.type,
@@ -153,7 +154,7 @@ SELECT c.concert_id,
   INNER JOIN performer AS f ON (cd.performer_id = f.performer_id)
   INNER JOIN metroarea AS m ON (c.metroarea_id = m.sk_id)
   INNER JOIN venue AS v ON (c.venue_id = v.sk_id);
-`
+```
 
 And (hopefully) that's all :D
 
