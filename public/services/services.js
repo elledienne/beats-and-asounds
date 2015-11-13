@@ -1,3 +1,4 @@
+// HANDLES USER AUTHENTICATION ============================
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
 
@@ -5,7 +6,7 @@ angular.module('beatssounds.services', [])
     var getPlaylists = function() {
       return $http({
           method: 'GET',
-          url: '/myconcerts', // change my myplaylists
+          url: '/myconcerts', // change to /myplaylists
           params: {
             location: locationData
           }
@@ -21,7 +22,7 @@ angular.module('beatssounds.services', [])
     var getFollowing = function() {
       return $http({
           method: 'GET',
-          url: '/myconcerts', // change my myfollowing
+          url: '/myconcerts', // change to /myfollowing
           params: {
             location: locationData
           }
@@ -37,7 +38,7 @@ angular.module('beatssounds.services', [])
     var getSimilar = function (artist) {
       return $http({
         method: 'GET',
-        url: '/myconcerts', // change to correct url
+        url: '/myconcerts', // change to /similar
         params: {
           artist: artist
         }
@@ -58,6 +59,7 @@ angular.module('beatssounds.services', [])
     };
   })
 
+// HANDLES TIME CALCULATION ==============================
 .factory('time', function() {
   var convertMonth = function(num) {
     var names = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -81,6 +83,7 @@ angular.module('beatssounds.services', [])
   };
 })
 
+// HANDLES USER GEOLOCATION ==============================
 .factory('space', function() {
   var findLocation = function(callback) {
     if (navigator.geolocation) {

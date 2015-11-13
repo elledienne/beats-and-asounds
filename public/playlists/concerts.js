@@ -22,7 +22,7 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
 
     /// GET BASED ON PLAYLISTS ===============================
     $scope.getPlaylists = function() {
-      this.isLoading = true;
+      $scope.isLoading = true;
       auth.getPlaylists().then(function(resp) {
         $scope.isLoading = false;
         $scope.data = resp;
@@ -32,7 +32,7 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
 
     /// GET BASED ON FOLLOWING ===============================
     $scope.getPlaylists = function() {
-      this.isLoading = true;
+      $scope.isLoading = true;
       auth.getFollowing().then(function(resp) {
         $scope.isLoading = false;
         $scope.data = resp;
@@ -40,9 +40,9 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       })
     };
 
-    /// FIND SIMILAR BASED ON ARTIST ========================
+    /// GET BASED ON SIMILAR ARTISTS ========================
     $scope.getSimilar = function (artist) {
-      this.isLoading = true;
+      $scope.isLoading = true;
       auth.getSimilar(artist).then (function (resp) {
         $scope.isLoading = false;
         $scope.data = resp;
