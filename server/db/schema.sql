@@ -30,11 +30,11 @@ CREATE TABLE `concert` (
   -- We are using their id to maintain consistency between our and their data :)
   -- `id` INTEGER AUTO_INCREMENT,
   `concert_id` INTEGER(8) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `concert_name` VARCHAR(255) NOT NULL,
   `type` VARCHAR(30) DEFAULT 'Concert',
-  `uri` VARCHAR(100) NOT NULL,
+  `concert_uri` VARCHAR(100) NOT NULL,
   `datetime` VARCHAR(35) NOT NULL,
-  `popularity` FLOAT DEFAULT 0,
+  `concert_popularity` FLOAT DEFAULT 0,
   -- `age_restrictions` // TODO: Check where/if is this guy in the response?
   `venue_id` INTEGER(8) NOT NULL,
   `headline_id` INTEGER(8) DEFAULT NULL,
@@ -54,8 +54,8 @@ CREATE TABLE `performer` (
   -- `id` INTEGER AUTO_INCREMENT,
   -- As for concert table: we are reusing the SongKick id
   `performer_id` INTEGER(8) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `uri` VARCHAR(100) DEFAULT NULL,
+  `performer_name` VARCHAR(255) NOT NULL,
+  `performer_uri` VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`performer_id`)
   
 );
@@ -101,8 +101,8 @@ DROP TABLE IF EXISTS `venue`;
 CREATE TABLE `venue` (
   -- Yeah, you got it
   `sk_id` INTEGER(15) NOT NULL,
-  `name` VARCHAR(100) NOT NULL,
-  `uri` VARCHAR(255) DEFAULT NULL,
+  `venue_name` VARCHAR(100) NOT NULL,
+  `venue_uri` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`sk_id`)
   
 );
@@ -113,7 +113,7 @@ CREATE TABLE `venue` (
 -- ---
 
 ALTER TABLE `concert` ADD INDEX (`type`, `metroarea_id`);
-ALTER TABLE `performer` ADD INDEX (`name`);
+ALTER TABLE `performer` ADD INDEX (`performer_name`);
 ALTER TABLE `concert_performer` ADD INDEX (`performer_id`);
 -- The key below is commented because i don't think you'll need 
 -- to index the table by area, but if you do, just uncomment it

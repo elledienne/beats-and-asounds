@@ -14,7 +14,8 @@
     "mysql": "^2.9.0",
     "node-calendar": "^0.1.4",
     "querystring": "~0.2.0",
-    "request": "~2.34.0"
+    "request": "~2.34.0",
+    "underscore": "^1.8.3"
   },
   "scripts": {
     "start": "node server/app.js"

@@ -12,7 +12,7 @@ module.exports.callback = function(req, res) {
   var code = req.query.code;
   spotify.getToken(code)
     .then(function(access_token, refresh_token) {
-      return spotify.findUser(access_token)
+      return spotify.findUser(access_token, refresh_token)
         .then(function(userID) {
           res.cookie("userID", userID, {
             maxAge: 900000,
@@ -50,11 +50,20 @@ module.exports.myConcerts = function(req, res) {
         }).then(function(tracks) {
           return spotify.getArtists(tracks);
         }).then(function(artists) {
+          console.log(artists, "artists in req handler");
           return songkick.findMyMetroArea(location)
             .then(function(metroID) {
-              return songkick.findConcerts(metroID);
-            }).then(function(concerts) {
-              return util.findMyConcerts(artists, concerts);
+              return query.checkForMetroID(metroID)
+                .then(function(metroInfo) {
+                  if (!metroInfo.length) {
+                    return songkick.findConcerts(metroID);
+                  } else {
+                    return;
+                  }
+                }).then(function() {
+                  console.log(artists, 'artists before pass to fetch')
+                  return query.fetchShows(artists, metroID);
+                })
             }).then(function(myShows) {
               res.json(myShows);
             });

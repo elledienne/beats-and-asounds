@@ -44,6 +44,7 @@ module.exports.getToken = function(code) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token;
         var refresh_token = body.refresh_token;
+        console.log(refresh_token, "refresh");
         resolve(access_token, refresh_token);
       } else {
         reject();
@@ -68,7 +69,6 @@ module.exports.refreshToken = function(req, res) {
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      req.session.accessToken = body.access_token;
       res.redirect('/login');
     }
   });
@@ -100,7 +100,7 @@ module.exports.getMyArtists = function(token) {
     // TO DO: what if they have more than 50 artists?
     var artists = {};
     artistsArr.forEach(function(artist) {
-      artists[artist.name] = {
+      artists[artist.name.toUpperCase()] = {
         info: artist
       };
     })
@@ -118,6 +118,7 @@ module.exports.getPlaylists = function(token, userID) {
   };
 
   return util.buildPromise(playlistOptions).then(function(body) {
+    console.log(body, "goddammit")
     return body.items
   });
 };
@@ -148,8 +149,8 @@ module.exports.getArtists = function(tracks) {
     if (trackListings.items) {
       trackListings.items.forEach(function(item) {
         item.track.artists.forEach(function(artist) {
-          if (!artists[artist.name]) {
-            artists[artist.name] = {
+          if (!artists[artist.name.toUpperCase()]) {
+            artists[artist.name.toUpperCase()] = {
               myCount: 1
             };
             var artistOptions = {
@@ -158,7 +159,7 @@ module.exports.getArtists = function(tracks) {
             };
             artistPromises.push(util.buildPromise(artistOptions));
           } else {
-            artists[artist.name].myCount++;
+            artists[artist.name.toUpperCase()].myCount++;
           }
         });
       });
@@ -167,7 +168,7 @@ module.exports.getArtists = function(tracks) {
   return Promise.all(artistPromises)
     .then(function(artistObjs) {
       artistObjs.forEach(function(artistObj) {
-        artists[artistObj.name].info = artistObj;
+        artists[artistObj.name.toUpperCase()].info = artistObj;
       });
       return artists;
     });
