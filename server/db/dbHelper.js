@@ -74,13 +74,11 @@ module.exports.insertHandler = function(concerts) {
 
 module.exports.addUserToDatabase = function(access_token, refresh_token, userID) {
   var selectParams = [userID];
-  var selectQueryString = "SELECT * FROM user WHERE userID=?";
-  return queryAsync(selectQueryString, selectParams)
+  return queryAsync(q.userSelect, selectParams)
     .then(function(potentialUser) {
       if (!potentialUser.length) {
         var insertParams = [access_token, refresh_token, userID];
-        var insertQueryString = "INSERT INTO user (access_token, refresh_token, userID) VALUES (?,?,?)";
-        return queryAsync(insertQueryString, insertParams);
+        return queryAsync(q.userInsert, insertParams);
       } else {
         return;
       }
@@ -89,15 +87,13 @@ module.exports.addUserToDatabase = function(access_token, refresh_token, userID)
 
 module.exports.findUserInDatabase = function(userID) {
   var params = [userID];
-  var queryString = "SELECT *  FROM user WHERE userID=?";
-  return queryAsync(queryString, params);
+  return queryAsync(q.userFetch, params);
 };
 
 module.exports.checkForMetroID = function(metroID) {
   console.log(metroID);
   var params = [metroID];
-  var queryString = "SELECT * FROM metroarea WHERE sk_id = ?"
-  return queryAsync(queryString, params);
+  return queryAsync(q.metroFetch, params);
 };
 
 module.exports.fetchShows = function(artists, metroID) {
@@ -106,14 +102,10 @@ module.exports.fetchShows = function(artists, metroID) {
   for (artist in artists) {
     console.log(artist, "artist");
     var params = [metroID, artist];
-    var queryString = "SELECT c.concert_id, c.concert_name, c.type, c.concert_uri, c.datetime, c.concert_popularity, c.metroarea_id, p.performer_name, p.performer_uri, m.area, v.venue_name, v.venue_uri FROM concert c INNER JOIN concert_performer cp ON(c.concert_id = cp.concert_id) INNER JOIN performer p ON(cp.performer_id = p.performer_id) INNER JOIN metroarea m ON(c.metroarea_id = m.sk_id) INNER JOIN venue v ON(c.venue_id = v.sk_id) WHERE m.sk_id = ? AND p.performer_name = ?";
-    concertPromises.push(queryAsync(queryString, params))
+    concertPromises.push(queryAsync(q.concert, params))
   }
   return Promise.all(concertPromises).then(function(concerts) {
     var toSend = _.flatten(concerts);
-    console.log(toSend);
-    console.log(concerts);
-
     util.assembleResponse(artists, toSend);
   });
 
