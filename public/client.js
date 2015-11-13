@@ -10,8 +10,7 @@ angular.module('beatssounds', [
       controller: 'concertsController'
     })
     .when('/loginpage', {
-      templateUrl: 'loginView.html',
-      controller: 'concertsController'
+      templateUrl: 'loginView.html'
     })
     .when('/playlists', {
       templateUrl: 'playlists/concerts.html',

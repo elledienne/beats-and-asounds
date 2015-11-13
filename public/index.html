@@ -3,59 +3,34 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="spotify/songkick queries">
-    <meta name="author" content="chubbyoptometrists">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="spotify/songkick queries">
+  <meta name="author" content="chubbyoptometrists">
 
-    <title>BeatsAndSounds</title>
+  <title>BeatsAndSounds</title>
 
-    <!-- Bootstrap Core CSS -->
-    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- Bootstrap Core CSS -->
+  <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 
-    <!-- Bootstrap CSS -->
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"  rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"  rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles/grayscale.css">
-    <link rel="stylesheet" href="styles/styles.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles/grayscale.css">
+  <link rel="stylesheet" href="styles/styles.css">
 
-    <!-- Custom Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Megrim' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
-    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-
+  <!-- Custom Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Megrim' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 </head>
-
   <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
+    <!-- Load Views -->
     <div ng-view></div>
-
-    <!-- Intro Header -->
-    <header class="intro">
-        <div class="intro-body">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <h1 class="brand-heading">Beats&Sounds</h1>
-                        <p class="intro-text">know when your favorite artists are in town<br>powered by Songkick & Spotify</p>
-                        <a href="/login" class="btn btn-circle">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <!-- Footer -->
-    <footer>
-        <div class="container text-center">
-            <p>Songs&Beats 2015</p>
-        </div>
-    </footer>
 
     <!-- Bower Components -->
     <script src="bower_components/angular/angular.js"></script>
@@ -80,6 +55,11 @@
     <script src="playlists/concerts.js"></script>
     <script src="client.js"></script>
 
+    <footer>
+      <div class="container text-center">
+        <p>Songs&Beats 2015</p>
+      </div>
+    </footer>
   </body>
 
 </html>
