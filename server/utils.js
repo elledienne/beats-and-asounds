@@ -53,16 +53,13 @@ module.exports.buildPromise = function(options) {
 
 
 
-module.exports.findMyConcerts = function(artists, concerts, callback) {
-  query.insertHandler(concerts);
+module.exports.assembleResponse = function(artists, concerts) {
   var myShows = [];
-  concerts.event.forEach(function(show) {
-    show.performance.forEach(function(performer) {
-      if (artists[performer.artist.displayName]) {
-        artists[performer.artist.displayName].show = show;
-        myShows.push(artists[performer.artist.displayName]);
-      }
-    });
+  concerts.forEach(function(event) {
+    if (event) {
+      artists[event.performer_name.toUpperCase()].show = event;
+      myShows.push(artists[event.performer_name.toUpperCase()]);
+    }
   });
   return myShows;
 };

@@ -100,7 +100,7 @@ module.exports.getMyArtists = function(token) {
     // TO DO: what if they have more than 50 artists?
     var artists = {};
     artistsArr.forEach(function(artist) {
-      artists[artist.name] = {
+      artists[artist.name.toUpperCase()] = {
         info: artist
       };
     })
@@ -148,8 +148,8 @@ module.exports.getArtists = function(tracks) {
     if (trackListings.items) {
       trackListings.items.forEach(function(item) {
         item.track.artists.forEach(function(artist) {
-          if (!artists[artist.name]) {
-            artists[artist.name] = {
+          if (!artists[artist.name.toUpperCase()]) {
+            artists[artist.name.toUpperCase()] = {
               myCount: 1
             };
             var artistOptions = {
@@ -158,7 +158,7 @@ module.exports.getArtists = function(tracks) {
             };
             artistPromises.push(util.buildPromise(artistOptions));
           } else {
-            artists[artist.name].myCount++;
+            artists[artist.name.toUpperCase()].myCount++;
           }
         });
       });
@@ -167,7 +167,7 @@ module.exports.getArtists = function(tracks) {
   return Promise.all(artistPromises)
     .then(function(artistObjs) {
       artistObjs.forEach(function(artistObj) {
-        artists[artistObj.name].info = artistObj;
+        artists[artistObj.name.toUpperCase()].info = artistObj;
       });
       return artists;
     });
