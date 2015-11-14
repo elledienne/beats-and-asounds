@@ -44,17 +44,16 @@ module.exports.getToken = function(code) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token;
         var refresh_token = body.refresh_token;
-        console.log(refresh_token, "refresh");
-        resolve(access_token, refresh_token);
+        var tokens = [access_token, refresh_token];
+        resolve(tokens);
       } else {
-        reject();
+        reject(error);
       }
     });
   });
 };
 
-module.exports.refreshToken = function(req, res) {
-  var refresh_token = req.session.refreshToken;
+module.exports.refreshToken = function(refresh_token) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -67,10 +66,12 @@ module.exports.refreshToken = function(req, res) {
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      res.redirect('/login');
-    }
+  return new Promise(function(resolve, reject) {
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        resolve(body);
+      }
+    });
   });
 }
 
@@ -106,7 +107,23 @@ module.exports.getMyArtists = function(token) {
     })
     return artists;
   });
-}
+};
+
+module.exports.getRelatedArtists = function(artistID) {
+  var relatedArtistOptions = {
+    url: 'https://api.spotify.com/v1/artists/' + artistID + '/related-artists',
+    json: true
+  };
+  return util.buildPromise(relatedArtistOptions).then(function(body) {
+    var artists = {};
+    body.artists.forEach(function(artist) {
+      artists[artist.name.toUpperCase()] = {
+        info: artist
+      };
+    })
+    return artists;
+  });
+};
 
 module.exports.getPlaylists = function(token, userID) {
   var playlistOptions = {
@@ -118,7 +135,6 @@ module.exports.getPlaylists = function(token, userID) {
   };
 
   return util.buildPromise(playlistOptions).then(function(body) {
-    console.log(body, "goddammit")
     return body.items
   });
 };
