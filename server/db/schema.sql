@@ -87,6 +87,7 @@ CREATE TABLE `metroarea` (
   -- Guess where are we taking this id :)
   `sk_id` INTEGER(15) NOT NULL,
   `area` VARCHAR(100) DEFAULT NULL,
+  `last_update` VARCHAR(30) NOT NULL,
   -- `location` VARCHAR(150) DEFAULT NULL,
   PRIMARY KEY (`sk_id`)
 );

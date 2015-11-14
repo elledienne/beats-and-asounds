@@ -44,8 +44,21 @@ var updateOldByAreas = function(){
 };
 
 var updateOldByAreas = function(){
-  
-}
+  // In order for this to work i've to create a new column in the area table where to store 
+  // the last update date.
+  // FOR DEVELOPMENT ONLY
+  var findAreasToUpdate = "SELECT sk_id FROM metroarea WHERE last_update + INTERVAL 7 SECOND < NOW()";
+  // FOR PRODUCTION
+  //var findAreasToUpdate = "SELECT sk_id FROM metroarea WHERE last_update + INTERVAL 7 DAY < NOW()";
+
+  db.query(findAreasToUpdate, [], function(err, rows, fields) {
+    if (err) throw err;
+    rows.forEach(function(area) {
+      console.log(area);
+      return update.findConcerts(area.sk_id);
+    });
+  });
+};
 
 module.exports = {
   deleteExpiredEvents: deleteExpiredEvents,

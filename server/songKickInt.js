@@ -18,6 +18,7 @@ module.exports.findConcerts = function(metroID) {
     json: true
   };
   return util.buildPromise(songKickOptions).then(function(body) {
+    console.log(body.resultsPage.results.event.length);
     query.insertHandler(body.resultsPage.results);
   });
 };
