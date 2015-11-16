@@ -1,10 +1,10 @@
-<div class='loading' ng-if='isLoading'>
+<div class='loading' ng-show='isLoading'>
   <img class='loadingGif' src='assets/spinny.gif'></img><br> 
   Finding your concerts...
 </div>
 <div>
 <!-- NAV BAR -->
-  <nav ng-if='isLoading==false' class="navbar navbar-default">
+  <nav ng-show='isLoading==false' class="navbar navbar-default">
     <div class="container-fluid">
   <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -16,8 +16,8 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="#/playlists" ng-click='getPlaylists()'>Playlists</a></li>
-          <li><a href="#/following" ng-click='getFollowing()'>Following</a></li>
+          <li><a href="#/concerts" ng-click='getPlaylists()'>Playlists</a></li>
+          <li><a style="cursor: pointer;" ng-click='getFollowing()'>Following</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
           <div class="form-group">
@@ -31,9 +31,10 @@
     </div><!-- /.container-fluid -->
   </nav>
     <!-- END NAV BAR  -->
-  <h4 ng-if='isLoading==false'>Showing {{showing}} of {{data.length}} events in your area</h4>
+  <h4 ng-show='isLoading==false && data.length!=0'>Showing {{showing}} of {{data.length}} events in your area</h4>
+  <h4 ng-show='data.length==0'>No events found</h4>
 <!-- THUMBNAILS FOR CONCERTS -->
-  <div ng-if='isLoading==false' class="row">
+  <div ng-show='isLoading==false' class="row">
     <div ng-repeat='event in filteredEvents | filter:searchText | orderBy:"show.start.date"'>
       <div class="col-sm-5 col-md-3">
         <div class="thumbnail">
@@ -41,14 +42,14 @@
             <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
           </div>
             <h3>{{event.info.name}}</h3>
-              <div>{{parseMonth(event.show.datetime)}},{{parseDay(event.show.datetime)}} @ {{event.show.venue_name}} (headline)</div>
-            <a ng-href='#' ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
-           <p><a href="{{event.show.RowDataPacket.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
+              <div>{{parseMonth(event.show.datetime)}} {{parseDay(event.show.datetime)}} @ {{event.show.venue_name}}</div>
+            <a style="cursor: pointer;" ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
+           <p><a href="{{event.show.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
         </div> <!-- end thumbnail -->
       </div> <!-- end col definition -->
     </div> <!-- end ngrepeat -->
   </div> <!-- end thumbnail row -->
-  <div ng-if='isLoading==false' class='text-center'>
+  <div ng-show='isLoading==false' class='text-center'>
     <pagination total-items="totalItems" items-per-page="itemsPerPage" page="currentPage"></pagination>
   </div>
 </div>

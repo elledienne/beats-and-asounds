@@ -20,13 +20,17 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       return event.myCount > 5 ? 'favorite' : '';
     }
 
+    $scope.loadData = function (resp) {
+      $scope.data = resp;
+      $scope.isLoading = false;
+      $scope.paginate();
+    };
+
     /// GET BASED ON PLAYLISTS ===============================
     $scope.getPlaylists = function() {
       $scope.isLoading = true;
       auth.getPlaylists().then(function(resp) {
-        $scope.isLoading = false;
-        $scope.data = resp;
-        $scope.paginate();
+        $scope.loadData(resp);
       })
     };
 
@@ -34,19 +38,15 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
     $scope.getFollowing = function() {
       $scope.isLoading = true;
       auth.getFollowing().then(function(resp) {
-        $scope.isLoading = false;
-        $scope.data = resp;
-        $scope.paginate();
+        $scope.loadData(resp);
       })
     };
 
     /// GET BASED ON SIMILAR ARTISTS ========================
-    $scope.getSimilar = function (artist_id) {
+    $scope.getSimilar = function (artistID) {
       $scope.isLoading = true;
-      auth.getSimilar(artist_id).then (function (resp) {
-        $scope.isLoading = false;
-        $scope.data = resp;
-        $scope.paginate();
+      auth.getSimilar(artistID).then (function (resp) {
+        $scope.loadData(resp);
       })
     };
 

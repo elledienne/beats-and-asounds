@@ -185,5 +185,9 @@ footer {
   transition: height 200ms linear;
 }
 
+.thumbnail {
+  /*height: fixed;*/
+}
+
 
 

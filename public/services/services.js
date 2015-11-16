@@ -1,63 +1,70 @@
 // HANDLES USER AUTHENTICATION ============================
 angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
-
+    var locationData = JSON.parse(localStorage.getItem("location"));
     var getPlaylists = function() {
-      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
-          method: 'GET',
-          url: '/myconcerts', // change to /myplaylists
-          params: {
-            location: locationData
-          }
-        })
-        .then(function(resp) {
-          if (resp.data === "go to login") {
-            $location.path('/loginpage');
-          } else {
-            return resp.data;
-          }
-        });
+        method: 'GET',
+        url: '/myconcerts',
+        params: {
+          location: locationData
+        }
+      })
+      .then(function(resp) {
+        if (resp.data === "go to login") {
+          $location.path('/loginpage');
+        } else {
+          return resp.data;
+        }
+      });
     };
     var getFollowing = function() {
-      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
-          method: 'GET',
-          url: '/myconcerts', // change to /myfollowing
-          params: {
-            location: locationData
-          }
-        })
-        .then(function(resp) {
-          if (resp.data === "go to login") {
-            $location.path('/loginpage');
-          } else {
-            return resp.data;
-          }
-        });
+        method: 'GET',
+        url: '/myartists',
+        params: {
+          location: locationData
+        }
+      })
+      .then(function(resp) {
+        if (resp.data === "go to login") {
+          $location.path('/loginpage');
+        } else {
+          return resp.data;
+        }
+      });
     };
-    var getSimilar = function(artist) {
-      var locationData = JSON.parse(localStorage.getItem("location"));
+    var getSimilar = function (artistID) {
       return $http({
-          method: 'GET',
-          url: '/suggestedconcerts', // change to /similar
-          params: {
-            artistID: artist
-          }
-        })
-        .then(function(resp) {
-          if (resp.data === "go to login") {
-            $location.path('/loginpage');
-          } else {
-            return resp.data;
-          }
-        });
+        method: 'GET',
+        url: '/suggestedconcerts',
+        params: {
+          artistID: artistID
+        }
+      })
+      .then(function (resp) {
+        console.log(resp);
+        if (resp.data === "go to login") {
+          $location.path('/loginpage');
+        } else {
+          return resp.data;
+        }
+      });
+    };
+    var logout = function () {
+      return $http({
+        method: 'GET',
+        url: '/logout'
+      })
+      .then(function (resp) {
+        $location.path('/loginpage');
+      });
     };
     return {
       getPlaylists: getPlaylists,
       getFollowing: getFollowing,
-      getSimilar: getSimilar
-        // logout: logout
+      getSimilar: getSimilar,
+      logout: logout
     };
   })
 

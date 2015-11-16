@@ -12,11 +12,11 @@ angular.module('beatssounds', [
     .when('/loginpage', {
       templateUrl: 'loginView.html'
     })
-    .when('/playlists', {
+    .when('/concerts', {
       templateUrl: 'playlists/concerts.html',
       controller: 'concertsController'
     })
-    .when('/following', {
+    .when('/similar', {
       templateUrl: 'playlists/concerts.html',
       controller: 'concertsController'
     })
