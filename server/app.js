@@ -64,7 +64,7 @@ var workerJob = new CronJob('*/30 * * * * *', function(){
     console.log('a');
     dbManager.deleteExpiredEvents();
     dbManager.updateOldByAreas();
-    workerJob.stop();
+    //workerJob.stop();
   }, function () {
     /* This function is executed when the job stops */
   },

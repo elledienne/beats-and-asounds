@@ -20,9 +20,8 @@ var queryAsync = function(queryString, queryParams) {
 }
 
 module.exports.insertHandler = function(concerts) {
-
   var concertPromises = [];
-  console.log('herea')
+
   concerts.event.forEach(function(concert) {
     var venue = concert.venue;
     var metroarea = venue.metroArea;
@@ -53,19 +52,14 @@ module.exports.insertHandler = function(concerts) {
         return queryAsync(q.venue, venueParams);
       })
       .then(function() {
-        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.datetime, concert.popularity, venue.id, headline_id, metroarea.id];
-        console.log('end')
-        return queryAsync(q.concert, concertParams).then(function(result){
-          console.log('DONE: ', d);
-        })
-        .catch(function(err){
-          console.log('ERR:');
-        });
+        var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.date, concert.popularity, venue.id, metroarea.id];
+        return queryAsync(q.concert, concertParams);
       })
       .then(function() {
         var joinPromises = [];
         var artist;
         var joinParams;
+
         concert.performance.forEach(function(performance) {
           artist = performance.artist;
           joinParams = [concert.id, artist.id];
