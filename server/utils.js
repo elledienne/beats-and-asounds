@@ -1,6 +1,7 @@
 var session = require('express-session');
 var Promise = require('bluebird');
 var request = require('request');
+var context = require('request-context');
 
 var query = require('./db/dbHelper.js');
 var spotify = require('./spotifyInt.js')
@@ -47,8 +48,11 @@ module.exports.checkToken = function(req, res, next) {
         console.log("refreshing token utils.js 45");
         return spotify.refreshToken(tokenInfo[0].refresh_token)
           .then(function(body) {
+            context.set('request:token', body.access_token);
             return query.updateUser(body.access_token, body.refresh_token, req.cookies.userID);
           })
+      } else {
+        context.set('request:token', tokenInfo[0].access_token);
       }
     }).then(function() {
       next();

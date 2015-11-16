@@ -81,7 +81,7 @@ module.exports.addUserToDatabase = function(access_token, refresh_token, userID)
         var insertParams = [access_token, refresh_token, userID, Date.now() / 60000];
         return queryAsync(q.userInsert, insertParams);
       } else {
-        return;
+        return module.exports.updateUser(access_token, refresh_token, userID);
       }
     });
 };
@@ -95,7 +95,7 @@ module.exports.updateUser = function(access_token, refresh_token, userID) {
 
 module.exports.fetchToken = function(userID) {
   var params = [userID];
-  var queryString = "SELECT created_at, refresh_token FROM user WHERE userID=?"
+  var queryString = "SELECT * FROM user WHERE userID=?"
   return queryAsync(queryString, params);
 };
 

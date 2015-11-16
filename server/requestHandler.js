@@ -1,4 +1,5 @@
 var querystring = require('querystring');
+var context = require('request-context');
 
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
@@ -12,7 +13,7 @@ module.exports.callback = function(req, res) {
   var code = req.query.code;
   spotify.getToken(code)
     .catch(function(error) {
-      console.log('OH NO ' + error + 'in callback requestHandler.js');
+      console.log('OH NO ' + error);
       res.redirect('/#' +
         querystring.stringify({
           error: 'invalid_token'
@@ -29,34 +30,32 @@ module.exports.callback = function(req, res) {
           });
           return query.addUserToDatabase(access_token, refresh_token, userID)
             .then(function() {
-              res.redirect('/');
+              res.status(301).redirect('/');
             });
-        })
+        });
     })
     .catch(function(error) {
-      console.log('OH NO ' + error + ' in callback, requestHandler.js');
+      console.log('OH NO ' + error);
     });
 };
 
 module.exports.myConcerts = function(req, res) {
-  query.findUserInDatabase(req.cookies.userID)
-    .then(function(userData) {
 
-      var userID = userData[0].userID;
-      var token = userData[0].access_token;
-      var location = req.query.location;
+  var userID = req.cookies.userID;
+  var token = context.get('request:token');
+  var location = req.query.location;
 
-      spotify.getPlaylists(token, userID)
-        .then(function(playlists) {
-          return spotify.getTracks(token, userID, playlists);
-        }).then(function(tracks) {
-          return spotify.getArtists(tracks);
-        }).then(function(artists) {
-          return module.exports.collectConcerts(location, artists);
-        }).then(function(myShows) {
-          res.json(myShows);
-        });
+  return spotify.getPlaylists(token, userID)
+    .then(function(playlists) {
+      return spotify.getTracks(token, userID, playlists);
+    }).then(function(tracks) {
+      return spotify.getArtists(tracks);
+    }).then(function(artists) {
+      return module.exports.collectConcerts(location, artists);
+    }).then(function(myShows) {
+      res.status(200).json(myShows);
     });
+
 };
 
 module.exports.suggestedConcerts = function(req, res) {
@@ -66,24 +65,23 @@ module.exports.suggestedConcerts = function(req, res) {
   return spotify.getRelatedArtists(artistID)
     .then(function(artists) {
       return module.exports.collectConcerts(location, artists);
+    }).then(function(myShows) {
+      res.status(200).json(myShows);
     })
 };
 
 module.exports.myArtists = function(req, res) {
-  query.findUserInDatabase(req.cookies.userID)
-    .then(function(userData) {
 
-      var userID = userData[0].userID;
-      var token = userData[0].access_token;
-      var location = req.query.location;
+  var userID = req.cookies.userID;
+  var token = context.get('request:token');
+  var location = req.query.location;
 
-      spotify.getMyArtists(token)
-        .then(function(artists) {
-          return module.exports.collectConcerts(location, artists);
-        }).then(function(myShows) {
-          res.json(myShows);
-        })
-    })
+  spotify.getMyArtists(token)
+    .then(function(artists) {
+      return module.exports.collectConcerts(location, artists);
+    }).then(function(myShows) {
+      res.status(200).json(myShows);
+    });
 };
 
 module.exports.collectConcerts = function(location, artists) {

@@ -1,5 +1,6 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
+var context = require('request-context');
 
 var spotify = require('./spotifyInt.js');
 var songkick = require('./songkickInt.js');
@@ -9,7 +10,8 @@ var requestHandler = require('./requestHandler.js');
 var app = express();
 
 app.use(express.static(__dirname + '/../public'))
-  .use(cookieParser());
+  .use(cookieParser())
+  .use(context.middleware('request'));
 
 app.get('/login', function(req, res) {
   spotify.authorize(req, res);
@@ -33,12 +35,11 @@ app.get('/suggestedconcerts', util.checkToken,
 app.get('/myartists', util.checkToken,
   function(req, res) {
     requestHandler.myArtists(req, res);
-
   });
 
-app.get('/refresh_token', function(req, res) {
-  spotify.refreshToken(req, res);
-});
+app.use(function(req, res, next) {
+  res.status(404).send('Not a valid endpoint');
+})
 
 console.log('Listening on 8888');
 app.listen(8888);

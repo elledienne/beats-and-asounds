@@ -6,6 +6,8 @@ var util = require('./utils');
 var query = require('./db/dbHelper.js');
 var api_key = supersecret.api_key;
 
+var SF_METRO_ID = 26330;
+
 module.exports.findConcerts = function(metroID) {
   var songKickOptions = {
     url: 'http://api.songkick.com/api/3.0/metro_areas/' + metroID + '/calendar.json?apikey=' + api_key + '&per_page=all',
@@ -18,9 +20,7 @@ module.exports.findConcerts = function(metroID) {
 
 module.exports.findMyMetroArea = function(location) {
   if (!location) {
-    return new Promise(function(resolve, reject) {
-      resolve(26330)
-    });
+    return Promise.resolve(SF_METRO_ID);
   }
   var locationOptions = {
     url: 'http://api.songkick.com/api/3.0/search/locations.json?location=geo:' + location[0] + ',' + location[1] + '&apikey=' + api_key,
