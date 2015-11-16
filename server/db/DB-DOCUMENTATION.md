@@ -142,7 +142,7 @@ SELECT c.concert_id,
 ```
 
 ### Mantaining the db 
-As i already said in the [input data](#input) chapter
+As I already said in the [input data](#input) chapter, we are using our DB to store Songkick data. This allows our website to be faster and more efficient, but carries some more complications that must be handled. The "problem" is that we cannot simply rely on Songkick for fresh, updated data: what we have to do is keep our DB updated constantly to be sure to serve to our 
 ### Handling asynchronousity
 
 We know that you know, but just to be sure: **all the DB operations are ASYNC**
