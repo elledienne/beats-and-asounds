@@ -5,6 +5,7 @@ var request = require('request');
 var util = require('./utils.js');
 var supersecret = require('./config.js');
 
+//client_id and client_secret are stored in config file so they won't appear on GitHub
 var client_id = supersecret.client_id;
 var client_secret = supersecret.client_secret;
 var redirect_uri = 'http://localhost:8888/callback';
@@ -75,6 +76,7 @@ module.exports.refreshToken = function(refresh_token) {
   });
 }
 
+//https://developer.spotify.com/web-api/get-current-users-profile/
 module.exports.findUser = function(token) {
   var authOptions = {
     url: 'https://api.spotify.com/v1/me',

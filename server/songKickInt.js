@@ -19,6 +19,7 @@ module.exports.findConcerts = function(metroID) {
 };
 
 module.exports.findMyMetroArea = function(location) {
+  //If no location is provided, default to SF.  The value is wrapped in a promise in order to not break the promise chain in the request handler (the first function in the chain must return a promise and not a regular value)
   if (!location) {
     return Promise.resolve(SF_METRO_ID);
   }

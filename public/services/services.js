@@ -3,7 +3,7 @@ angular.module('beatssounds.services', [])
   .factory('auth', function($http, $location) {
 
     var getPlaylists = function() {
-    var locationData = JSON.parse(localStorage.getItem("location"));
+      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
           url: '/myconcerts', // change to /myplaylists
@@ -11,7 +11,7 @@ angular.module('beatssounds.services', [])
             location: locationData
           }
         })
-        .then(function (resp) {
+        .then(function(resp) {
           if (resp.data === "go to login") {
             $location.path('/loginpage');
           } else {
@@ -20,7 +20,7 @@ angular.module('beatssounds.services', [])
         });
     };
     var getFollowing = function() {
-    var locationData = JSON.parse(localStorage.getItem("location"));
+      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
           method: 'GET',
           url: '/myconcerts', // change to /myfollowing
@@ -28,7 +28,7 @@ angular.module('beatssounds.services', [])
             location: locationData
           }
         })
-        .then(function (resp) {
+        .then(function(resp) {
           if (resp.data === "go to login") {
             $location.path('/loginpage');
           } else {
@@ -36,28 +36,28 @@ angular.module('beatssounds.services', [])
           }
         });
     };
-    var getSimilar = function (artist) {
-    var locationData = JSON.parse(localStorage.getItem("location"));
+    var getSimilar = function(artist) {
+      var locationData = JSON.parse(localStorage.getItem("location"));
       return $http({
-        method: 'GET',
-        url: '/myconcerts', // change to /similar
-        params: {
-          artist: artist
-        }
-      })
-      .then(function (resp) {
-        if (resp.data === "go to login") {
-          $location.path('/loginpage');
-        } else {
-          return resp.data;
-        }
-      });
+          method: 'GET',
+          url: '/suggestedconcerts', // change to /similar
+          params: {
+            artistID: artist
+          }
+        })
+        .then(function(resp) {
+          if (resp.data === "go to login") {
+            $location.path('/loginpage');
+          } else {
+            return resp.data;
+          }
+        });
     };
     return {
       getPlaylists: getPlaylists,
       getFollowing: getFollowing,
       getSimilar: getSimilar
-      // logout: logout
+        // logout: logout
     };
   })
 

@@ -99,10 +99,10 @@ module.exports.fetchToken = function(userID) {
   return queryAsync(queryString, params);
 };
 
-module.exports.findUserInDatabase = function(userID) {
-  var params = [userID];
-  return queryAsync(q.userFetch, params);
-};
+// module.exports.findUserInDatabase = function(userID) {
+//   var params = [userID];
+//   return queryAsync(q.userFetch, params);
+// };
 
 module.exports.checkForMetroID = function(metroID) {
   var params = [metroID];
