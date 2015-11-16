@@ -142,7 +142,7 @@ SELECT c.concert_id,
 ```
 
 ### Mantaining the db 
-As i already said in the "inserting data chap"
+As i already said in the [input data](#input) chapter
 ### Handling asynchronousity
 
 We know that you know, but just to be sure: **all the DB operations are ASYNC**
