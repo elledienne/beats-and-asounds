@@ -1,24 +1,28 @@
 {
-  "author": "Doozer",
-  "name": "web-api-code-example",
-  "description": "Basic examples of the Spotify authorization flows through oAuth2",
+  "author": "Laura Gelston",
+  "name": "BeatsandSounds",
+  "description": "",
   "version": "0.0.1",
   "main": "app.js",
   "dependencies": {
     "bluebird": "^3.0.5",
     "browserify": "^12.0.1",
+    "chai": "^3.4.1",
     "cldr": "^3.2.0",
     "cookie-parser": "1.3.2",
     "express": "~4.0.0",
     "express-session": "^1.12.1",
+    "mocha": "^2.3.4",
     "mysql": "^2.9.0",
     "node-calendar": "^0.1.4",
     "querystring": "~0.2.0",
     "request": "~2.34.0",
     "request-context": "^0.1.6",
+    "supertest": "^1.1.0",
     "underscore": "^1.8.3"
   },
   "scripts": {
-    "start": "node server/app.js"
+    "start": "node server/app.js",
+    "test": "mocha server/servertest.js"
   }
 }

@@ -7,7 +7,7 @@ To log in with Spotify, the response is redirected to Spotify for authorization 
 
 Requests to `/myconcerts`, `/myartists`, and `/suggestedartits` (see endpoints below) are protected by middleware that checks for the userID cookie and looks up the user's access token.  If a request doesn't have such a cookie, or the userID is not found in the user table, the server sends a response to go to login and the login page is displayed.  Additionally, this function checks the age of the access token (which expires every hour) and updates it using the user's refresh token if it is more than 50min old.
 
-All requests to any endpoint should have a 'location' parameter `({location: [latitude, longitude]})` that is used to find the nearest metro area.  The location information is stored on the client's browser in local storage.  If no location information is provided, the metro area will default to San Francisco/Bay Area.       
+All requests to any endpoint except `/login` should have a 'location' parameter `({location: [latitude, longitude]})` that is used to find the nearest metro area.  The location information is stored on the client's browser in local storage.  If no location information is provided, the metro area will default to San Francisco/Bay Area.       
 
 ## Beats&Sounds API Endpoints ##
 
