@@ -87,7 +87,6 @@ module.exports.addUserToDatabase = function(access_token, refresh_token, userID)
 };
 
 module.exports.updateUser = function(access_token, refresh_token, userID) {
-  console.log(access_token, refresh_token, userID);
   var params = refresh_token ? [access_token, refresh_token, Date.now() / 60000, userID] : [access_token, Date.now() / 60000, userID];
   var queryString = refresh_token ? "UPDATE user SET access_token = ?, refresh_token = ?, created_at = ? WHERE userID = ?" : "UPDATE user SET access_token = ?, created_at = ? WHERE userID = ?"
   return queryAsync(queryString, params);

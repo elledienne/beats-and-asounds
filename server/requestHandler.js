@@ -34,6 +34,7 @@ module.exports.callback = function(req, res) {
           //User is added to DB with their access token and refresh token (it's unsafe to set tokens as cookies)
           return query.addUserToDatabase(access_token, refresh_token, userID)
             .then(function() {
+              //Redirects back to homepage (homepage will immediately make another request for concert information)
               res.status(301).redirect('/');
             });
         });
@@ -60,7 +61,6 @@ module.exports.myConcerts = function(req, res) {
     }).then(function(artists) {
       return module.exports.collectConcerts(location, artists);
     }).then(function(myShows) {
-      console.log(myShows);
       res.status(200).json(myShows);
     });
 
