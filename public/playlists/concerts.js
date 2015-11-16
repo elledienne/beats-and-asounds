@@ -21,8 +21,8 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
     }
 
     $scope.loadData = function (resp) {
-      $scope.isLoading = false;
       $scope.data = resp;
+      $scope.isLoading = false;
       $scope.paginate();
     };
 
