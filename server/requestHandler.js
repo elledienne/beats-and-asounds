@@ -44,6 +44,7 @@ module.exports.callback = function(req, res) {
 };
 
 module.exports.myConcerts = function(req, res) {
+  // request query is { location : [latitude, longitude] }
 
   var userID = req.cookies.userID;
   //request context is set in utils.checkToken so we don't need to query for the userID in the database twice
@@ -59,12 +60,14 @@ module.exports.myConcerts = function(req, res) {
     }).then(function(artists) {
       return module.exports.collectConcerts(location, artists);
     }).then(function(myShows) {
+      console.log(myShows);
       res.status(200).json(myShows);
     });
 
 };
 
 module.exports.suggestedConcerts = function(req, res) {
+  // request query is { artistID : artistID, location : [latitude, longitude] }
   var location = req.query.location;
   var artistID = req.query.artistID;
   console.log(artistID, req.query);
@@ -78,6 +81,8 @@ module.exports.suggestedConcerts = function(req, res) {
 };
 
 module.exports.myArtists = function(req, res) {
+  // request query is { location : [latitude, longitude] }
+
   var userID = req.cookies.userID;
   var token = context.get('request:token');
   var location = req.query.location;

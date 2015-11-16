@@ -21,6 +21,7 @@ module.exports.checkState = function(req, res, next) {
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
+  //Checks that incoming connection is result of authentication request
   if (state === null || state !== storedState) {
     res.redirect('/#' +
       querystring.stringify({
@@ -42,12 +43,15 @@ module.exports.checkToken = function(req, res, next) {
         console.log('redirecting to login because token is undefined');
         res.end('go to login');
       }
+      //Check to see if token has expired or will expire soon -access tokens expire after 60 min
       var currentTime = Date.now() / 60000;
       console.log("token age", currentTime - tokenInfo[0].created_at, "utils.js 43");
       if (currentTime - tokenInfo[0].created_at > 50) {
         console.log("refreshing token utils.js 45");
         return spotify.refreshToken(tokenInfo[0].refresh_token)
           .then(function(body) {
+            //request-context sets data on current request in 'request' namespace
+            //Makes it so we only have to look up the access token once
             context.set('request:token', body.access_token);
             return query.updateUser(body.access_token, body.refresh_token, req.cookies.userID);
           })

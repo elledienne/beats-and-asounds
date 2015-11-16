@@ -13,6 +13,7 @@ var app = express();
 
 app.use(express.static(__dirname + '/../public'))
   .use(cookieParser())
+  //Wrap request handling for current request lifecycle in a 'request' domain
   .use(context.middleware('request'));
 
 //More information about authenticating with Spotify via authorization code flow:
