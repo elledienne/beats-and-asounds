@@ -31,7 +31,7 @@
     </div><!-- /.container-fluid -->
   </nav>
     <!-- END NAV BAR  -->
-  <h4 ng-show='isLoading==false'>Showing {{showing}} of {{data.length}} events in your area</h4>
+  <h4 ng-show='isLoading==false && data.length!=0'>Showing {{showing}} of {{data.length}} events in your area</h4>
   <h4 ng-show='data.length==0'>No events found</h4>
 <!-- THUMBNAILS FOR CONCERTS -->
   <div ng-show='isLoading==false' class="row">
@@ -42,9 +42,9 @@
             <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
           </div>
             <h3>{{event.info.name}}</h3>
-              <div>{{parseMonth(event.show.datetime)}} {{parseDay(event.show.datetime)}} @ {{event.show.venue_name}} (headline)</div>
-            <a href='#/similar' ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
-           <p><a href="{{event.show.RowDataPacket.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
+              <div>{{parseMonth(event.show.datetime)}} {{parseDay(event.show.datetime)}} @ {{event.show.venue_name}}</div>
+            <a style="cursor: pointer;" ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
+           <p><a href="{{event.show.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
         </div> <!-- end thumbnail -->
       </div> <!-- end col definition -->
     </div> <!-- end ngrepeat -->
