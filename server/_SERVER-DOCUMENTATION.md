@@ -21,7 +21,8 @@ All requests to any endpoint should have a 'location' parameter ({location: [lat
 
 ## Expected Response Format ##
 
-`[ { myCount: 6,
+```javascript
+[ { myCount: 6,
     info:
      { external_urls: [Object],
        followers: [Object],
@@ -64,4 +65,5 @@ All requests to any endpoint should have a 'location' parameter ({location: [lat
        venue_uri: 'http://www.songkick.com/venues/329-mezzanine?utm_source=37367&utm_medium=partner' 
      } 
   }, ......
-]`
+]
+```
