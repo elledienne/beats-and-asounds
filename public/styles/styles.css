@@ -133,11 +133,21 @@ footer {
   width: 250px;
 }
 
+.thumbnail {
+  padding: 0px;
+  overflow: hidden;
+}
+
 .imageContainer {
-  width : 250px;
+  background-size: cover;
+  background-repeat: no-repeat;
   height : 250px;
   overflow: hidden;
   margin: auto;
+}
+
+.thumbnailtxt {
+  padding: 10px; 
 }
 
 .showListing {
@@ -184,10 +194,5 @@ footer {
   -o-transition: height 200ms linear;
   transition: height 200ms linear;
 }
-
-.thumbnail {
-  /*height: fixed;*/
-}
-
 
 

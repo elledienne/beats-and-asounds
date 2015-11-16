@@ -38,13 +38,14 @@
     <div ng-repeat='event in filteredEvents | filter:searchText | orderBy:"show.start.date"'>
       <div class="col-sm-5 col-md-3">
         <div class="thumbnail">
-          <div class='imageContainer'>
-            <img class='artistImg' ng-src="{{event.info.images[0].url}}"></img>
+          <div class='imageContainer' style='background-image: url({{event.info.images[0].url}})'>
           </div>
+          <div class='thumbnailtxt'>
             <h3>{{event.info.name}}</h3>
               <div>{{parseMonth(event.show.datetime)}} {{parseDay(event.show.datetime)}} @ {{event.show.venue_name}}</div>
             <a style="cursor: pointer;" ng-click='getSimilar(event.info.id)' class='going'>Find similar</a>
            <p><a href="{{event.show.concert_uri}}" class="btn btn-primary" role="button">Buy tickets</a></p>
+         </div>
         </div> <!-- end thumbnail -->
       </div> <!-- end col definition -->
     </div> <!-- end ngrepeat -->
