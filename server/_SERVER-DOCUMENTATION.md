@@ -17,7 +17,7 @@ All requests to any endpoint except `/login` should have a 'location' parameter 
 | /myartists        |    GET    |JSON (location)          | Return JSON for local concerts by followed artits      |
 | /suggestedconcerts|    GET    |JSON (location, artistID)| Return JSON for local concerts by similar artists      |
 | /login            |    GET    |Empty                    | Empty                                                  |
-
+| /logout           |    GET    |Empty                    | Empty                                                  |
 
 ## Expected Response Format ##
 

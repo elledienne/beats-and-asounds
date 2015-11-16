@@ -61,7 +61,6 @@ module.exports.myConcerts = function(req, res) {
     }).then(function(artists) {
       return module.exports.collectConcerts(location, artists);
     }).then(function(myShows) {
-      console.log(myShows);
       res.status(200).json(myShows);
     });
 

@@ -4,67 +4,57 @@ angular.module('beatssounds.services', [])
     var locationData = JSON.parse(localStorage.getItem("location"));
     var getPlaylists = function() {
       return $http({
-        method: 'GET',
-        url: '/myconcerts',
-        params: {
-          location: locationData
-        }
-      })
-      .then(function(resp) {
-        if (resp.data === "go to login") {
-          $location.path('/loginpage');
-        } else {
-          return resp.data;
-        }
-      });
+          method: 'GET',
+          url: '/myconcerts',
+          params: {
+            location: locationData
+          }
+        })
+        .then(function(resp) {
+          if (resp.data === "go to login") {
+            $location.path('/loginpage');
+          } else {
+            return resp.data;
+          }
+        });
     };
     var getFollowing = function() {
       return $http({
-        method: 'GET',
-        url: '/myartists',
-        params: {
-          location: locationData
-        }
-      })
-      .then(function(resp) {
-        if (resp.data === "go to login") {
-          $location.path('/loginpage');
-        } else {
-          return resp.data;
-        }
-      });
+          method: 'GET',
+          url: '/myartists',
+          params: {
+            location: locationData
+          }
+        })
+        .then(function(resp) {
+          if (resp.data === "go to login") {
+            $location.path('/loginpage');
+          } else {
+            return resp.data;
+          }
+        });
     };
-    var getSimilar = function (artistID) {
+    var getSimilar = function(artistID) {
       return $http({
-        method: 'GET',
-        url: '/suggestedconcerts',
-        params: {
-          artistID: artistID
-        }
-      })
-      .then(function (resp) {
-        console.log(resp);
-        if (resp.data === "go to login") {
-          $location.path('/loginpage');
-        } else {
-          return resp.data;
-        }
-      });
-    };
-    var logout = function () {
-      return $http({
-        method: 'GET',
-        url: '/logout'
-      })
-      .then(function (resp) {
-        $location.path('/loginpage');
-      });
+          method: 'GET',
+          url: '/suggestedconcerts',
+          params: {
+            artistID: artistID
+          }
+        })
+        .then(function(resp) {
+          console.log(resp);
+          if (resp.data === "go to login") {
+            $location.path('/loginpage');
+          } else {
+            return resp.data;
+          }
+        });
     };
     return {
       getPlaylists: getPlaylists,
       getFollowing: getFollowing,
-      getSimilar: getSimilar,
-      logout: logout
+      getSimilar: getSimilar
     };
   })
 

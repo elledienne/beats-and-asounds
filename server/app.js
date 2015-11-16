@@ -43,6 +43,13 @@ app.get('/myartists', util.checkToken,
     requestHandler.myArtists(req, res);
   });
 
+app.get('/logout', util.checkToken,
+  function(req, res) {
+    console.log('here');
+    res.clearCookie('userID');
+    res.redirect('/');
+  });
+
 app.use(function(req, res, next) {
   res.status(404).send('Not a valid endpoint');
 })
