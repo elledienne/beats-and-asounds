@@ -55,8 +55,13 @@ var updateOldByAreas = function(){
     if (err) throw err;
     rows.forEach(function(area) {
       console.log(area);
-      return update.findConcerts(area.sk_id);
+      concertsPromises.push(update.findConcerts(area.sk_id));
     });
+
+    return Promise.all(concertsPromises)
+      .then(function() {
+        console.log('DONE!');
+      });
   });
 };
 

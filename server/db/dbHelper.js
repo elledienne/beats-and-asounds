@@ -55,7 +55,12 @@ module.exports.insertHandler = function(concerts) {
       .then(function() {
         var concertParams = [concert.id, concert.displayName, concert.type, concert.uri, concert.start.datetime, concert.popularity, venue.id, headline_id, metroarea.id];
         console.log('end')
-        return queryAsync(q.concert, concertParams);
+        return queryAsync(q.concert, concertParams).then(function(result){
+          console.log('DONE: ', d);
+        })
+        .catch(function(err){
+          console.log('ERR:');
+        });
       })
       .then(function() {
         var joinPromises = [];
