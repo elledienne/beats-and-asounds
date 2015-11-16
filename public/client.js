@@ -20,6 +20,10 @@ angular.module('beatssounds', [
       templateUrl: 'playlists/concerts.html',
       controller: 'concertsController'
     })
+    .when('/similar', {
+      templateUrl: 'playlists/concerts.html',
+      controller: 'concertsController'
+    })
     .otherwise({
       redirectTo: '/'
     })
