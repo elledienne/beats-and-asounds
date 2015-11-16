@@ -51,6 +51,7 @@ var updateOldByAreas = function(){
   // FOR PRODUCTION
   //var findAreasToUpdate = "SELECT sk_id FROM metroarea WHERE last_update + INTERVAL 7 DAY < NOW()";
 
+  var concertsPromises = [];
   db.query(findAreasToUpdate, [], function(err, rows, fields) {
     if (err) throw err;
     rows.forEach(function(area) {
