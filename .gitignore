@@ -1,6 +1,5 @@
 ### node etc ###
-
-public/.DS_Store
+.DS_Store
 bower_components
 node_modules
 server/config.js
