@@ -11,7 +11,7 @@ var requestHandler = require('./requestHandler.js');
 
 // required for automating webworker
 var CronJob = require('cron').CronJob;
-var dbManager = require('./worker/dbManager.js');
+var stachanov = require('./worker/dbManager.js');
 
 var app = express();
 
@@ -61,12 +61,12 @@ app.use(function(req, res, next) {
 
 var workerJob = new CronJob('*/30 * * * * *', function(){
     // This runs every 30
-    console.log('a');
-    dbManager.deleteExpiredEvents();
-    dbManager.updateOldByAreas();
+    stachanov.deleteExpiredEvents();
+    stachanov.updateOldByAreas();
     //workerJob.stop();
   }, function () {
     /* This function is executed when the job stops */
+    console.log('Cron stopped!')
   },
   true, /* Start the job right now */
   timeZone = 'America/Los_Angeles' /* Time zone of this job. */
