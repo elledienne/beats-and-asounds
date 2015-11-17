@@ -142,7 +142,11 @@ SELECT c.concert_id,
 ```
 
 ### Mantaining the db 
-As I already said in the [input data](#input) chapter, we are using our DB to store Songkick data. This allows our website to be faster and more efficient, but carries some more complications that must be handled. The "problem" is that we cannot simply rely on Songkick for fresh, updated data: what we have to do is keep our DB updated constantly to be sure to serve to our 
+As I already said in the [input data](#input) chapter, we are using our DB to store Songkick data. This allows our website to be faster and more efficient, but carries some more complications that must be handled. The "problem" is that we cannot simply rely on Songkick for fresh, updated data: what we have to do is keep our DB updated constantly to be sure to always serve fresh data.
+
+##### Meet Stachanov
+Stachanov is our web worker, a script run using cron that is constantly perform some actions to remove old entries, check when the last fetch from Songkick happen for each metro area and based on that decides what need to be updated and refreshed.
+
 ### Handling asynchronousity
 
 We know that you know, but just to be sure: **all the DB operations are ASYNC**
