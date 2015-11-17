@@ -11,7 +11,7 @@ var requestHandler = require('./requestHandler.js');
 
 // required for automating webworker
 var CronJob = require('cron').CronJob;
-var stachanov = require('./worker/dbManager.js');
+var stachanov = require('./worker/dbStachanov.js');
 
 var app = express();
 
