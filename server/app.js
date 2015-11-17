@@ -56,17 +56,17 @@ app.get('/logout', util.checkToken,
 
 app.use(function(req, res, next) {
   res.status(404).send('Not a valid endpoint');
-})
+});
 
 
-var workerJob = new CronJob('*/30 * * * * *', function(){
+var workerJob = new CronJob('0 1 * * 5', function(){
     // This runs every 30
     stachanov.deleteExpiredEvents();
     stachanov.updateOldByAreas();
     //workerJob.stop();
   }, function () {
     /* This function is executed when the job stops */
-    console.log('Cron stopped!')
+    console.log('Cron stopped!');
   },
   true, /* Start the job right now */
   timeZone = 'America/Los_Angeles' /* Time zone of this job. */
