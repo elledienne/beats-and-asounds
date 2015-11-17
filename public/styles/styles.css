@@ -125,6 +125,24 @@ footer {
   float: none;
 }
 
+.btn-primary {
+  background-color: #F70144;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #de003d;
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
+  background-color: #F70144;
+  border: none;
+}
+
+.pagination>li>a, .pagination>li>span {
+  color: #F70144;
+}
+
 .loadingGif {
   width: 150px;
 }
@@ -139,15 +157,27 @@ footer {
 }
 
 .imageContainer {
-  background-size: cover;
+  background-size: cover !important;
   background-repeat: no-repeat;
-  height : 250px;
+  height : 415px;
+  width: 100%;
   overflow: hidden;
   margin: auto;
 }
 
 .thumbnailtxt {
-  padding: 10px; 
+  padding: 20px 10px 10px 10px;
+  margin-top: -164px;
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.79), black);
+  color: white;
+}
+
+.going {
+  color: #ddd;
+}
+
+.going:hover {
+  color: #ddd;
 }
 
 .showListing {
