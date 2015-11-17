@@ -22,8 +22,8 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
 
     $scope.loadData = function (resp) {
       $scope.data = resp;
-      $scope.isLoading = false;
       $scope.paginate();
+      $scope.isLoading = false;
     };
 
     /// GET BASED ON PLAYLISTS ===============================
@@ -73,7 +73,7 @@ angular.module('beatssounds.concerts', ['ui.bootstrap'])
       
         var counter = $scope.data.length / $scope.itemsPerPage;
         if ($scope.currentPage <= counter) {
-          $scope.showing = $scope.itemsPerPage;
+          $scope.showing = $scope.itemsPerPage*$scope.currentPage;
         } else {
           $scope.showing = $scope.data.length;
         }
