@@ -1,6 +1,10 @@
 # Beats & Sounds
 
-> HR34 Greenfield Project
+Beats and sounds lets you find nearby music events based on your tastes.
+
+###How it works? It's super easy! 
+
+Go to our [website](https://beats-and-sounds.herokuapp.com/), log in with your Spotify account and we will do all the magic: we will cross your music tastes with the amazing SongKick database and we will show you all the music events that are relevant to you!
 
 ## Team
 
@@ -20,7 +24,7 @@
 
 ## Usage
 
-> Some usage instructions
+Visit the page, currently hosted on [beats-and-sounds.herokuapp.com](https://beats-and-sounds.herokuapp.com/)
 
 ## Requirements
 
