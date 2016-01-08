@@ -8,7 +8,7 @@ Go to our [website](https://beats-and-sounds.herokuapp.com/), log in with your S
 
 ## Team
 
-  - __Product Owner__: Laura Gelston
+  - __Product Owner__: Laura Gelston 
   - __Scrum Master__: Abel Wang
   - __Development Team Members__: Jessica O'Brien, Lorenzo de Nobili
 
